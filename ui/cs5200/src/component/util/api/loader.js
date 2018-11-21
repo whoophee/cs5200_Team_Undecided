@@ -9,7 +9,12 @@ class Component extends React.Component {
         };
     }
     componentDidMount() {
-        this.props.load()
+        this._load();
+        if (this.props.reloadRef) this.props.reloadRef(this._reload);
+    }
+
+    _load() {
+        return this.props.load()
             .then((data) => {
                 this.setState({
                     data
@@ -20,6 +25,10 @@ class Component extends React.Component {
                     err
                 })
             });
+    }
+
+    _reload = () => {
+        this._load();
     }
 
     render() {

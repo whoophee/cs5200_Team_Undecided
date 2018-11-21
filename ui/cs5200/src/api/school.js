@@ -6,6 +6,12 @@ export async function getAllSchools() {
     return result.body;
 }
 
+export async function getSchool(id) {
+    const result = await request
+        .get('/api/schools/' + id + '/');
+    return result.body;
+}
+
 export async function registerSchool(school) {
     const result = await request
         .post('/api/schools/')
