@@ -5,7 +5,8 @@ class Component extends React.Component {
     constructor() {
         super();
         this.state = {
-            data: null
+            data: null,
+            status: "unloaded"
         };
     }
     componentDidMount() {
@@ -14,28 +15,33 @@ class Component extends React.Component {
     }
 
     _load() {
+        this.setState({
+            status: "loading"
+        });
         return this.props.load()
             .then((data) => {
                 this.setState({
-                    data
+                    data,
+                    status: "loaded"
                 })
             })
             .catch((err) => {
                 this.setState({
-                    err
+                    err,
+                    status: "error"
                 })
             });
     }
 
     _reload = () => {
-        this._load();
+        return this._load();
     }
 
     render() {
         const Child = this.props.component;
 
         if (this.state.data != null) {
-            return <Child {...this.props.mapLoadToProps(this.state.data)} {...this.props}/>;
+            return <Child {...this.props.mapLoadToProps(this.state.data)} loadStatus={this.state.status} reload={this._reload} {...this.props}/>;
         }
         return <Spin/>
     }

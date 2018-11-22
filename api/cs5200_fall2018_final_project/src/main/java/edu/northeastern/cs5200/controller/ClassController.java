@@ -10,7 +10,9 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
 import edu.northeastern.cs5200.model.Class;
-import edu.northeastern.cs5200.repository.*;;
+import edu.northeastern.cs5200.model.School;
+import edu.northeastern.cs5200.repository.*;
+import edu.northeastern.cs5200.resolvers.CurrentUser;;
 
 @RestController
 public class ClassController {
@@ -18,9 +20,23 @@ public class ClassController {
 	@Autowired
 	private ClassRepository classRepository;
 
-	@RequestMapping(value="/api/school/{schoolId}/classes/", method=RequestMethod.GET)
-	public List<Class> registerProfessor(@PathVariable(value="schoolId") int id) {
-		return this.classRepository.findClassesForSchool(id);
+	@RequestMapping(value="/api/school/me/classes/", method=RequestMethod.GET)
+	public List<Class> getClassesForSchool(@CurrentUser School currentUser) {
+		return this.classRepository.findClassesForSchool(currentUser.getId());
+	}
+	
+	@RequestMapping(value="/api/classes/{id}/", method=RequestMethod.GET)
+	public Class getClassWithSections(@PathVariable("id") int id) {
+		return this.classRepository.getClassWithSections(id);
+	}
+	
+	@RequestMapping(value="/api/school/me/classes/", method=RequestMethod.POST)
+	public int addClassForSchool(
+			@CurrentUser School currentUser,
+			@RequestBody Class classData) {
+		classData.setSchool(currentUser);
+		this.classRepository.save(classData);
+		return 0;
 	}
 	
 

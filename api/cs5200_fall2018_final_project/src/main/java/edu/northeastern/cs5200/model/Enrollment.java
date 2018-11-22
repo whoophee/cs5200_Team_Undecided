@@ -8,8 +8,10 @@ import javax.persistence.*;
 import com.fasterxml.jackson.annotation.JsonIdentityInfo;
 import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 
+import edu.northeastern.cs5200.model.util.EasyToDeserializeObjectIdGenerator;
+
 @Entity
-@JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "id")
+@JsonIdentityInfo(generator = EasyToDeserializeObjectIdGenerator.class, property = "@id")
 public class Enrollment {
 	@EmbeddedId
 	private EnrollmentId id;
@@ -46,7 +48,7 @@ public class Enrollment {
 	}
 
 	@Embeddable
-	static class EnrollmentId implements Serializable {
+	public static class EnrollmentId implements Serializable {
 		/**
 		 * 
 		 */
@@ -77,6 +79,37 @@ public class Enrollment {
 		}
 		public void setSection(Section section) {
 			this.section = section;
+		}
+
+		@Override
+		public int hashCode() {
+			final int prime = 31;
+			int result = 1;
+			result = prime * result + ((section == null) ? 0 : section.hashCode());
+			result = prime * result + ((student == null) ? 0 : student.hashCode());
+			return result;
+		}
+
+		@Override
+		public boolean equals(Object obj) {
+			if (this == obj)
+				return true;
+			if (obj == null)
+				return false;
+			if (getClass() != obj.getClass())
+				return false;
+			EnrollmentId other = (EnrollmentId) obj;
+			if (section == null) {
+				if (other.section != null)
+					return false;
+			} else if (!section.equals(other.section))
+				return false;
+			if (student == null) {
+				if (other.student != null)
+					return false;
+			} else if (!student.equals(other.student))
+				return false;
+			return true;
 		}
 		
 		

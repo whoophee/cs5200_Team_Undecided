@@ -7,13 +7,16 @@ import javax.persistence.*;
 import com.fasterxml.jackson.annotation.JsonIdentityInfo;
 import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 
+import edu.northeastern.cs5200.model.util.EasyToDeserializeObjectIdGenerator;
+
 @Entity
-@JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "id")
+@JsonIdentityInfo(generator = EasyToDeserializeObjectIdGenerator.class, property = "@id")
 public class Class {
 	@Id
 	@GeneratedValue(strategy=GenerationType.IDENTITY)
 	private int id;
 	private String name;
+	private String description;
 	private String courseNumber;
 	
 	@ManyToOne(optional=false)
@@ -64,6 +67,14 @@ public class Class {
 
 	public void setSections(List<Section> sections) {
 		this.sections = sections;
+	}
+
+	public String getDescription() {
+		return description;
+	}
+
+	public void setDescription(String description) {
+		this.description = description;
 	}
 
 	

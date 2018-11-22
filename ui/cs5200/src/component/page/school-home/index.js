@@ -1,7 +1,9 @@
 import React from 'react';
 import { Layout, Menu } from 'antd';
-import { Link, Route } from "react-router-dom";
+import { Link, Route, Redirect } from "react-router-dom";
 import Classes from './classes';
+import Sections from './sections';
+import ClassesEdit from './class/index';
 
 class Component extends React.Component {
     _renderSider() {
@@ -9,7 +11,8 @@ class Component extends React.Component {
         return (
             <Menu
                 mode="inline"
-                defaultSelectedKeys={['class']}>
+                defaultSelectedKeys={['class']}
+                style={{height: '100%'}}>
                 <Menu.Item key="class">
                     <Link to={path + "classes/"}>Classes</Link>
                 </Menu.Item>
@@ -25,19 +28,24 @@ class Component extends React.Component {
             </Menu>
         )
     }
+    _redirectToClasses = () => {
+        return <Redirect to={this.props.match.path + 'classes/'}/>;
+    };
     _renderContent() {
         const path = this.props.match.path;
         return (
             <div style={{padding: '10px'}}>
-                <Route path={path + 'classes/'} component={Classes}/>
-                Lol
+                <Route path={path} exact render={this._redirectToClasses}/>
+                <Route path={path + 'classes/:id/'} exact component={ClassesEdit}/>
+                <Route path={path + 'classes/'} exact component={Classes}/>
+                <Route path={path + 'sections/'} exact component={Sections}/>
             </div>
         );
     }
     render() {
         return (
             <Layout style={{padding: '24px 0px', margin: '0 100px', backgroundColor: '#fff'}}>
-                <Layout.Sider width={300}>
+                <Layout.Sider width={300} height="100%">
                     {this._renderSider()}
                 </Layout.Sider>
                 <Layout.Content>

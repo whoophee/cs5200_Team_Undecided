@@ -50,7 +50,6 @@ public class Student extends User {
 		public School deserialize(JsonParser p, DeserializationContext ctxt)
 				throws IOException, JsonProcessingException {
 			int id = p.getIntValue();
-			System.out.println("Getting with id = " + id);
 			return this.schoolRepository.getOne(id);
 		}
 	}

@@ -23,7 +23,7 @@ public class SchoolController {
 		return this.schoolRepository.findAll();
 	}
 	
-	@RequestMapping(value = "/api/schools/{id}", method = RequestMethod.GET)
+	@RequestMapping(value = "/api/schools/{id}/", method = RequestMethod.GET)
 	public School getSchoolWithClasses(@PathVariable(value="id") int id) {
 		return this.schoolRepository.findWithClasses(id);
 	}
