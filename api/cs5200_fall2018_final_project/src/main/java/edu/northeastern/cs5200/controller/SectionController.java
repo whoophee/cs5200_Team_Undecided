@@ -21,7 +21,6 @@ public class SectionController {
 	private SectionRepository sectionRepository;
 	@Autowired
 	private ProfessorRepository professorRepository;
-	
 
 	@RequestMapping(value="/api/me/sections/", method=RequestMethod.GET)
 	public List<Section> getSectionsForMe(@CurrentUser User currentUser) {
@@ -29,6 +28,16 @@ public class SectionController {
 			return this.sectionRepository.findSectionsForSchool(currentUser.getId());
 		}
 		return new ArrayList<>();
+	}
+	
+	@RequestMapping(value="/api/sections/{id}/", method=RequestMethod.PATCH)
+	public int patchSection(
+			@CurrentUser User currentUser,
+			@RequestBody Section section,
+			@PathVariable("id") int id) {
+		section.setId(id);
+		this.sectionRepository.save(section);
+		return 0;
 	}
 	
 	@RequestMapping(value="/api/professors/{professorId}/sections/", method=RequestMethod.POST)
@@ -40,6 +49,4 @@ public class SectionController {
 		this.sectionRepository.save(section);
 		return 0;
 	}
-	
-
 }

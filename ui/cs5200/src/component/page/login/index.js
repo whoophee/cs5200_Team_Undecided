@@ -3,7 +3,7 @@ import { Form, Input, Button, Card, Row, Col } from 'antd';
 import { Link, Redirect } from "react-router-dom";
 import { update } from '../../util/datastore/user';
 import { login } from '../../../api/user';
-import User from '../../util/datastore/user';
+import { WithUser } from '../../util/datastore/user';
 
 class Component extends React.Component {
     _handleSubmit = (e) => {
@@ -50,6 +50,4 @@ class Component extends React.Component {
     }
 }
 
-const WithUser = (props) => <User component={Component} {...props}/>
-
-export default Form.create()(WithUser);
+export default Form.create()(WithUser(Component));

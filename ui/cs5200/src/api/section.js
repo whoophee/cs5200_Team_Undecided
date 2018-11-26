@@ -6,6 +6,12 @@ export async function getSectionsForMe() {
     return makeObjectGraph(result.body);
 }
 
+export async function approveSection(sectionId) {
+    const result = await request.patch('/api/sections/' + sectionId + '/')
+        .send({approved: true});
+    return result.body;
+}
+
 export async function addSectionForProfessor(professorId, sec) {
     const result = await request.post('/api/professors/' + professorId + '/sections/')
         .send(sec);

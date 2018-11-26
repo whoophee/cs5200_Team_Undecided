@@ -2,11 +2,13 @@ package edu.northeastern.cs5200.controller;
 
 import java.util.List;
 import java.util.Random;
+import java.util.stream.Collectors;
 
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletResponse;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.jpa.repository.Query;
 import org.springframework.web.bind.annotation.CookieValue;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -15,7 +17,8 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import edu.northeastern.cs5200.model.*;
-import edu.northeastern.cs5200.repository.*;;
+import edu.northeastern.cs5200.repository.*;
+import edu.northeastern.cs5200.resolvers.CurrentUser;;
 
 @RestController
 public class UserController {
@@ -59,6 +62,15 @@ public class UserController {
 			response.addCookie(usernameCookie);
 		}
 		return u;
+	}
+	
+	@RequestMapping(value="/api/me/contacts/", method=RequestMethod.GET)
+	public List<User> getConversationPartnersForUser(
+			@CurrentUser User user,
+			@RequestParam("name") String query) {
+		return this.userRepository.findLike(query).stream()
+				.filter(u -> u.getId() != user.getId())
+				.collect(Collectors.toList());
 	}
 
 }

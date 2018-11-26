@@ -11,6 +11,7 @@ import edu.northeastern.cs5200.model.util.EasyToDeserializeObjectIdGenerator;
 
 @Entity
 @JsonIdentityInfo(generator = EasyToDeserializeObjectIdGenerator.class, property = "@id")
+@Table(name="cevent")
 public class CareerEvent {
 	
 	@Id
@@ -21,6 +22,7 @@ public class CareerEvent {
 	@ManyToOne
 	private School school;
 	private LocalDateTime start;
+	@Column(name="endTime")
 	private LocalDateTime end;
 	private String name;
 	private String description;

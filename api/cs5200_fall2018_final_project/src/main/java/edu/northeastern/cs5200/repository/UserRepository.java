@@ -13,4 +13,7 @@ public interface UserRepository extends JpaRepository<User, Integer>  {
 	
 	@Query("select user from User user where user.token=?1 and user.username=?2")
 	public User findByToken(String token, String username);
+	
+	@Query("select user from User user where lower(user.name) like lower(?1)")
+	public List<User> findLike(String name);
 }

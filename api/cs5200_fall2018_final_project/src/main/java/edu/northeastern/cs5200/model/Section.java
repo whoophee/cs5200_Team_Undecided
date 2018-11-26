@@ -33,6 +33,8 @@ public class Section {
 	private List<ProfessorAnswer> professorAnswers;
 	@OneToMany(mappedBy="section")
 	private List<Note> notes;
+	@OneToMany(mappedBy="enrollment.id.section")
+	private List<Question> questions;
 	@ManyToOne(optional=false)
 	@JsonDeserialize(using=ClassDeserializer.class)
 	@JsonTypeInfo(use = JsonTypeInfo.Id.NONE)

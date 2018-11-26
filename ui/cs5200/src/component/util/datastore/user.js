@@ -21,4 +21,12 @@ export const update = updatee;
 
 getLoggedInUserData().then(body => update(() => ({user: body})));
 
+export const WithUser = (child) => {
+    const datastore = {
+        component: child,
+        mapToProps: props => props
+    };
+    return (props) => <ChildComponent datastore={datastore} {...props}/>
+};
+
 export default Component;

@@ -1,12 +1,24 @@
 package edu.northeastern.cs5200.model;
 
+import java.io.IOException;
 import java.util.*;
 import javax.persistence.*;
 
-import com.fasterxml.jackson.annotation.JsonIdentityInfo;
-import com.fasterxml.jackson.annotation.ObjectIdGenerators;
+import org.springframework.beans.factory.annotation.Autowired;
 
+import com.fasterxml.jackson.annotation.JsonIdentityInfo;
+import com.fasterxml.jackson.annotation.JsonTypeInfo;
+import com.fasterxml.jackson.annotation.ObjectIdGenerators;
+import com.fasterxml.jackson.core.JsonParser;
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.DeserializationContext;
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+
+import edu.northeastern.cs5200.model.Professor.ProfessorSchoolDeserializer;
 import edu.northeastern.cs5200.model.util.EasyToDeserializeObjectIdGenerator;
+import edu.northeastern.cs5200.model.util.ManyToOneDeserializer;
+import edu.northeastern.cs5200.repository.SchoolRepository;
+import edu.northeastern.cs5200.repository.UserRepository;
 
 @Entity
 @JsonIdentityInfo(generator = EasyToDeserializeObjectIdGenerator.class, property = "@id")
@@ -15,8 +27,12 @@ public class Conversation {
 	@GeneratedValue(strategy=GenerationType.IDENTITY)
 	private int id;
 	@ManyToOne
+	@JsonDeserialize(using=ConversationUserDeserializer.class)
+	@JsonTypeInfo(use = JsonTypeInfo.Id.NONE)
 	private User user1;
 	@ManyToOne
+	@JsonDeserialize(using=ConversationUserDeserializer.class)
+	@JsonTypeInfo(use = JsonTypeInfo.Id.NONE)
 	private User user2;
 	@OneToMany(mappedBy="conversation")
 	private List<Message> messages;
@@ -58,5 +74,14 @@ public class Conversation {
 		this.messages = messages;
 	}
 
-	
+	static class ConversationUserDeserializer extends ManyToOneDeserializer<User> {
+		@Autowired
+		private UserRepository userRepository;
+		@Override
+		public User deserialize(JsonParser p, DeserializationContext ctxt)
+				throws IOException, JsonProcessingException {
+			int id = p.getIntValue();
+			return this.userRepository.getOne(id);
+		}
+	}
 }

@@ -7,7 +7,7 @@ import Loader from '../../../util/api/loader';
 
 const renderListItem = (curSection) => {
     return (
-        <List.Item>
+        <List.Item key={curSection.id}>
             <List.Item.Meta
                 title={curSection.name}
                 description={curSection.description}/>
@@ -133,6 +133,9 @@ class Component extends React.Component {
                         onCreate={this._handleCreateSection}
                         onCancel={this._handleAddNewSectionToggle}
                         loading={this.state.modalLoading}/>
+                    <Row>
+                        <h1>Edit Class</h1>
+                    </Row>
                     <Row>
                         <Form layout="vertical" onSubmit={this._handleSubmit}>
                             <Form.Item label="Course Number">
