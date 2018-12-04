@@ -8,6 +8,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import edu.northeastern.cs5200.model.*;
@@ -26,6 +27,8 @@ public class SectionController {
 	public List<Section> getSectionsForMe(@CurrentUser User currentUser) {
 		if (currentUser instanceof School) {
 			return this.sectionRepository.findSectionsForSchool(currentUser.getId());
+		} else if (currentUser instanceof Student) {
+			return this.sectionRepository.findSectionsForStudent(currentUser.getId());
 		}
 		return new ArrayList<>();
 	}
@@ -48,5 +51,18 @@ public class SectionController {
 		section.setProfessor(this.professorRepository.getOne(professorId));
 		this.sectionRepository.save(section);
 		return 0;
+	}
+	
+	@RequestMapping(value="/api/sections/{id}/", method=RequestMethod.GET)
+	public Section getSectionWithQuestions(
+			@PathVariable("id") int id) {
+		return this.sectionRepository.getSectionWithQuestions(id);
+	}
+	
+	@RequestMapping(value="/api/sections/search/", method=RequestMethod.GET)
+	public List<Section> getSectionsByName(
+			@RequestParam("name") String name,
+			@CurrentUser Student student) {
+		return this.sectionRepository.getSectionsByName(name, student.getSchool().getId());
 	}
 }

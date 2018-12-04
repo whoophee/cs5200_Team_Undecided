@@ -43,11 +43,11 @@ class Component extends React.Component {
         if (this.props.reloadRef) this.props.reloadRef(this._reload);
     }
 
-    _load() {
+    _load(arg) {
         this.setState({
             status: "loading"
         });
-        return this.props.load(this.props.loadArg)
+        return this.props.load(arg || this.props.loadArg)
             .then((data) => {
                 this.setState({
                     data,
@@ -68,8 +68,8 @@ class Component extends React.Component {
         }
     }
 
-    _reload = () => {
-        return this._load();
+    _reload = (arg) => {
+        return this._load(arg);
     }
 
     render() {
@@ -81,5 +81,7 @@ class Component extends React.Component {
         return <Spin/>
     }
 }
+
+export const WithLoader = (load, {loadArg = () => undefined, mapLoadToProps = null}) => (Child) => (props) => <Component mapLoadToProps={mapLoadToProps} load={load} loadArg={loadArg(props)} component={Child} {...props}/>;
 
 export default Component;

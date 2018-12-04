@@ -17,3 +17,20 @@ export async function addSectionForProfessor(professorId, sec) {
         .send(sec);
     return result.body;
 }
+
+export async function getSectionWithQuestions(sectionId) {
+    const result = await request.get('/api/sections/' + sectionId + '/');
+    return makeObjectGraph(result.body);
+}
+
+export async function enrollMeInSection(sectionId) {
+    const result = await request.post('/api/me/enroll/')
+        .send({id: sectionId});
+    return result.body;
+}
+
+export async function getSectionsByName(name) {
+    const result = await request.get('/api/sections/search/')
+        .query({name});
+    return makeObjectGraph(result.body);
+}

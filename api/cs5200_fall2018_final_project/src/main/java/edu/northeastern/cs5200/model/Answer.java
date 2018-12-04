@@ -11,6 +11,7 @@ import edu.northeastern.cs5200.model.util.EasyToDeserializeObjectIdGenerator;
 
 @Entity
 @JsonIdentityInfo(generator = EasyToDeserializeObjectIdGenerator.class, property = "@id")
+@Inheritance(strategy = InheritanceType.JOINED)
 abstract public class Answer {
 	@Id
 	@GeneratedValue(strategy=GenerationType.IDENTITY)

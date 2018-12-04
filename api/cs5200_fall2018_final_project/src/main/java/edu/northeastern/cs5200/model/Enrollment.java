@@ -23,6 +23,11 @@ public class Enrollment {
 		this.questions = new ArrayList<>();
 		this.answers = new ArrayList<>();
 	}
+	
+	public Enrollment(EnrollmentId id) {
+		this();
+		this.id = id;
+	}
 
 	public List<Question> getQuestions() {
 		return questions;

@@ -1,32 +1,31 @@
 import React from 'react';
-import { Layout } from 'antd';
-import { Route } from 'react-router-dom';
+import { Layout, Spin } from 'antd';
 import QuestionPane from './question-pane';
+import QuestionMenu from './question-menu';
+import { WithLoader } from '../../util/api/loader';
+import { getSectionWithQuestions } from '../../../api/section';
 
 class SectionPage extends React.Component {
     _renderSider() {
-
+        const {sectionId, questionId} = this.props.match.params;
+        const questions = this.props.section.questions;
+        const reload = this.props.reload;
+        return <QuestionMenu reload={reload} sectionId={sectionId} questionId={questionId} questions={questions}/>
     }
-    _renderEmptyPane = () => {
-        return "No question selected";
-    };
+
     _renderContent() {
-        const path = this.props.match.path;
-        return (
-            <div>
-                <Route path={path} exact render={this._renderEmptyPane}/>
-                <Route path={path + 'questions/:id'} exact component={QuestionPane}/>
-            </div>
-        );
+        const {sectionId, questionId} = this.props.match.params;
+        if (questionId == null) return "No Question Selected";
+        return <QuestionPane sectionId={sectionId} questionId={questionId}/>;
     }
     render() {
         
         return (
             <Layout style={{backgroundColor: '#fff'}}>
-                <Layout.Sider width={300} height="100%" style={{backgroundColor: '#fff'}}>
+                <Layout.Sider width={300} height="100%" style={{backgroundColor: '#fff', overflowY: 'hidden'}}>
                     {this._renderSider()}
                 </Layout.Sider>
-                <Layout.Content>
+                <Layout.Content style={{overflowY: 'scroll'}}>
                     {this._renderContent()}
                 </Layout.Content>
             </Layout>
@@ -34,4 +33,7 @@ class SectionPage extends React.Component {
     }
 }
 
-export default SectionPage;
+export default WithLoader(getSectionWithQuestions, {
+    mapLoadToProps: (section) => ({section}),
+    loadArg: (props) => props.match.params.sectionId
+})(SectionPage);

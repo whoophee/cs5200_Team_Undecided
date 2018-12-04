@@ -1,6 +1,8 @@
 package edu.northeastern.cs5200.model;
 import java.io.IOException;
 import java.util.*;
+import java.util.stream.Collectors;
+
 import javax.persistence.*;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -28,13 +30,11 @@ public class Section {
 	@ManyToOne(optional=false)
 	private Professor professor;
 	@OneToMany(mappedBy="id.section")
-	private List<Enrollment> enrollments;
+	private Set<Enrollment> enrollments;
 	@OneToMany(mappedBy="section")
 	private List<ProfessorAnswer> professorAnswers;
 	@OneToMany(mappedBy="section")
-	private List<Note> notes;
-	@OneToMany(mappedBy="enrollment.id.section")
-	private List<Question> questions;
+	private Set<Note> notes;
 	@ManyToOne(optional=false)
 	@JsonDeserialize(using=ClassDeserializer.class)
 	@JsonTypeInfo(use = JsonTypeInfo.Id.NONE)
@@ -42,9 +42,9 @@ public class Section {
 	private boolean approved;
 	
 	public Section() {
-		this.enrollments = new ArrayList<>();
+		this.enrollments = new LinkedHashSet<>();
 		this.professorAnswers = new ArrayList<>();
-		this.notes = new ArrayList<>();
+		this.notes = new LinkedHashSet<>();
 		// TODO Auto-generated constructor stub
 	}
 
@@ -72,8 +72,6 @@ public class Section {
 		this.approved = approved;
 	}
 
-	
-
 	public Professor getProfessor() {
 		return professor;
 	}
@@ -89,14 +87,6 @@ public class Section {
 	public void setSchoolClass(Class schoolClass) {
 		this.schoolClass = schoolClass;
 	}
-
-	public List<Enrollment> getEnrollments() {
-		return enrollments;
-	}
-
-	public void setEnrollments(List<Enrollment> enrollments) {
-		this.enrollments = enrollments;
-	}
 	
 	
 	public List<ProfessorAnswer> getProfessorAnswers() {
@@ -106,13 +96,31 @@ public class Section {
 	public void setProfessorAnswers(List<ProfessorAnswer> professorAnswers) {
 		this.professorAnswers = professorAnswers;
 	}
+	
+	public Set<Enrollment> getEnrollments() {
+		return enrollments;
+	}
 
-	public List<Note> getNotes() {
+	public void setEnrollments(Set<Enrollment> enrollments) {
+		this.enrollments = enrollments;
+	}
+
+	public Set<Note> getNotes() {
 		return notes;
 	}
 
-	public void setNotes(List<Note> notes) {
+	public void setNotes(Set<Note> notes) {
 		this.notes = notes;
+	}
+
+	public List<Question> getQuestions() {
+		if (!org.hibernate.Hibernate.isInitialized(this.enrollments)) {
+			return null;
+		}
+		return this.enrollments.stream()
+				.flatMap((Enrollment e) -> e.getQuestions().stream())
+				.sorted((a, b) -> -(a.getAskedOn().compareTo(b.getAskedOn())))
+				.collect(Collectors.toList());
 	}
 
 

@@ -2,6 +2,7 @@ import React from 'react';
 import Loader from '../../util/api/loader';
 import { getConversationWithMessages, sendMessage } from '../../../api/conversation';
 import { Spin, Row, Card, Form, Input, Button } from 'antd';
+import { WithUser } from '../../util/datastore/user';
 
 export class MessagePaneInner extends React.Component {
     constructor(props) {
@@ -98,4 +99,4 @@ const mapLoadToProps = (conversation) => ({conversation});
 
 const MessagePane = (props) => (<Loader load={getConversationWithMessages} mapLoadToProps={mapLoadToProps} loadArg={props.match.params.id} component={MessagePaneInnerWithUser} {...props}/>);
 
-export default MessagePane;
+export default WithUser(MessagePane);

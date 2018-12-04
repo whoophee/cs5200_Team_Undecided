@@ -4,6 +4,8 @@ import login from './component/page/login/index';
 import register from './component/page/register/index';
 import school from './component/page/school-home/index';
 import conversations from './component/page/conversations/index';
+import sections from './component/page/section/index';
+import student from './component/page/student-home/index';
 import './App.css';
 import { Layout, Menu } from 'antd';
 
@@ -20,6 +22,8 @@ class App extends Component {
           <Route path="/login/" component={login}/>
           <Route path="/register/" component={register}/>
           <Route path="/conversations/" component={conversations}/>
+          <Route path="/sections/:sectionId/:questionId?/" exact component={sections}/>
+          <Route path="/student/" component={student}/>
         </Layout>
       </Router>
     );

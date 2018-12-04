@@ -42,7 +42,7 @@ class ConversationPage extends React.Component {
             </div>
         );
     }
-    _renderMessagePane = (props) => <MessagePane {...props} user={this.props.user}/>;
+    _renderMessagePane = (props) => <MessagePane {...props}/>;
     _renderConversationSelector = (props) => <ConversationSelector me={this.props.user} conversations={this.props.conversations} {...props}/>;
     render() {
         const path = this.props.match.path;

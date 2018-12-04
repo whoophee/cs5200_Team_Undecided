@@ -1,10 +1,11 @@
 import React from 'react';
 
 const makeDatastoreWithSet = (componentRegister, initData) => class extends React.Component {
+    _isMounted = false;
 
     constructor(props) {
         super(props);
-        this.state = initData;
+        this.state = initData[0];
     }
 
     render() {
@@ -23,12 +24,22 @@ const makeDatastoreWithSet = (componentRegister, initData) => class extends Reac
 
 export function makeDatastore(initData) {
     const set = new Set();
-    let data = initData;
+    let data = [initData];
+    const Component = makeDatastoreWithSet(set, data);
     return {
-        Component: makeDatastoreWithSet(set, data),
+        Component,
         update: (fun) => {
-            data = fun(data);
-            set.forEach(item => item.setState(data));
+            data[0] = fun(data[0]);
+            set.forEach(item => {
+                item.setState(data[0]); 
+            });
+        },
+        WithDatastore: (Child, mapToProps = props => props) => (props) => {
+            const datastore = {
+                component: Child,
+                mapToProps
+            };
+            return <Component datastore={datastore} {...props}/>;
         }
     };
 }
