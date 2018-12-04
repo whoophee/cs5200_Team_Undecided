@@ -15,3 +15,8 @@ export async function login(username, password) {
         .type('form');
     return result.body;
 }
+
+export async function logout() {
+    const result = await request.get('/api/users/logout/');
+    return result.body;
+}

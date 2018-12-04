@@ -61,13 +61,14 @@ class AddSectionModalInner extends React.Component {
                                 <ClassSelector/>
                             )}
                         </Form.Item>
+                        {!this.props.professor &&
                         <Form.Item label="Professor">
                             {getFieldDecorator('professor', {
                                 rules: [{required: true, message: "Please select a professor"}]
                             })(
                                 <ProfessorSelector/>
                             )}
-                        </Form.Item>
+                        </Form.Item>}
                     </Form>
                 </Spin>
             </Modal>  
@@ -94,7 +95,7 @@ export class SectionsPage extends React.Component {
                 modalLoading: true
             });
             addSectionForProfessor(
-                values.professor,
+                values.professor || this.props.professor.id,
                 {
                     name: values.name,
                     schoolClass: values.class
@@ -127,7 +128,8 @@ export class SectionsPage extends React.Component {
                     visible={this.state.modalVisible}
                     onCreate={this._handleCreateSection}
                     onCancel={this._handleAddNewSectionToggle}
-                    loading={this.state.modalLoading}/>
+                    loading={this.state.modalLoading}
+                    professor={this.props.professor}/>
                 <Row type="flex" justify="space-between">
                     <h1>Sections</h1>
                     <Button type="primary" onClick={this._handleAddNewSectionToggle}>

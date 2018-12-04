@@ -9,8 +9,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
+import edu.northeastern.cs5200.model.*;
 import edu.northeastern.cs5200.model.Class;
-import edu.northeastern.cs5200.model.School;
 import edu.northeastern.cs5200.repository.*;
 import edu.northeastern.cs5200.resolvers.CurrentUser;;
 
@@ -21,8 +21,13 @@ public class ClassController {
 	private ClassRepository classRepository;
 
 	@RequestMapping(value="/api/school/me/classes/", method=RequestMethod.GET)
-	public List<Class> getClassesForSchool(@CurrentUser School currentUser) {
-		return this.classRepository.findClassesForSchool(currentUser.getId());
+	public List<Class> getClassesForMe(@CurrentUser User currentUser) {
+		if (currentUser instanceof School) {
+			return this.classRepository.findClassesForSchool(currentUser.getId());
+		} else if (currentUser instanceof Professor) {
+			return this.classRepository.findClassesForSchool(((Professor) currentUser).getSchool().getId());
+		}
+		return null;
 	}
 	
 	@RequestMapping(value="/api/classes/{id}/", method=RequestMethod.GET)

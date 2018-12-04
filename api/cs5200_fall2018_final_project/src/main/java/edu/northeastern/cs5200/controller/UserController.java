@@ -64,6 +64,13 @@ public class UserController {
 		return u;
 	}
 	
+	@RequestMapping(value="/api/users/logout/", method=RequestMethod.GET)
+	public int logout(HttpServletResponse response) {
+		response.addCookie(new Cookie("token", ""));
+		response.addCookie(new Cookie("username", ""));
+		return 0;
+	}
+	
 	@RequestMapping(value="/api/me/contacts/", method=RequestMethod.GET)
 	public List<User> getConversationPartnersForUser(
 			@CurrentUser User user,

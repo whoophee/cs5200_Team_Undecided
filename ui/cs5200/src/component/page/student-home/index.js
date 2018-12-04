@@ -28,7 +28,7 @@ class StudentHome extends React.Component {
     _renderMySections() {
         return (
             <Row>
-                <List>
+                <List bordered>
                     {this.props.sections.map(this._renderSection)}
                 </List>
             </Row>
@@ -83,9 +83,11 @@ class StudentHome extends React.Component {
     }
     render() {
         return (
-            <Layout>
-                <Layout.Content>
+            <Layout style={{padding: '24px 0px', margin: '0 100px', backgroundColor: '#fff'}}>
+                <Layout.Content style={{padding: '0px 20px'}}>
+                    <Row><h2>Register for Section</h2></Row>
                     {this._renderSectionRegister()}
+                    <Row><h2>My Sections</h2></Row>
                     {this._renderMySections()}
                 </Layout.Content>
             </Layout>

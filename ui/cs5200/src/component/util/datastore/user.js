@@ -29,4 +29,18 @@ export const WithUser = (child) => {
     return (props) => <ChildComponent datastore={datastore} {...props}/>
 };
 
+export const getUserType = user => {
+    if (user == null) return null;
+    if (user.hasOwnProperty('enrollments')) return 'student';
+    if (user.hasOwnProperty('classes')) return 'school';
+    if (user.hasOwnProperty('sections')) return 'professor';
+    if (user.hasOwnProperty('careerEvents')) return 'company';
+    return null;
+};
+
+export const NeedsUser = (userTypes, elseRender = (props) => null) => (Child) => WithUser((props) => {
+    if (userTypes.indexOf(getUserType(props.user)) < 0) return elseRender(props);
+    return <Child {...props}/>;
+});
+
 export default Component;

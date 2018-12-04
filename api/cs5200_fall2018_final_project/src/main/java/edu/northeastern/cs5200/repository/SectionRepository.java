@@ -19,4 +19,7 @@ public interface SectionRepository extends JpaRepository<Section, Integer>  {
 	
 	@Query("select section from Section section join section.enrollments enrollments join enrollments.id.student student where student.id=?1")
 	public List<Section> findSectionsForStudent(int studentId);
+	
+	@Query("select section from Section section join section.professor professor where professor.id=?1")
+	public List<Section> findSectionsForProfessor(int professorId);
 }

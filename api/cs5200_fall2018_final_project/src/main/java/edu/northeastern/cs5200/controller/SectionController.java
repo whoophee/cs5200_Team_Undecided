@@ -29,6 +29,8 @@ public class SectionController {
 			return this.sectionRepository.findSectionsForSchool(currentUser.getId());
 		} else if (currentUser instanceof Student) {
 			return this.sectionRepository.findSectionsForStudent(currentUser.getId());
+		} else if (currentUser instanceof Professor) {
+			return this.sectionRepository.findSectionsForProfessor(currentUser.getId());
 		}
 		return new ArrayList<>();
 	}
@@ -48,6 +50,13 @@ public class SectionController {
 			@CurrentUser User currentUser,
 			@PathVariable("professorId") int professorId,
 			@RequestBody Section section) {
+		if (currentUser instanceof Student || currentUser instanceof Company) {
+			return -1;
+		}
+		if (currentUser instanceof Professor) {
+			Professor p = (Professor) currentUser;
+			if (p.getId() != professorId) return -1;
+		}
 		section.setProfessor(this.professorRepository.getOne(professorId));
 		this.sectionRepository.save(section);
 		return 0;
