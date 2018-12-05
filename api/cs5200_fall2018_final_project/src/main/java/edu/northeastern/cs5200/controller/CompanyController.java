@@ -2,10 +2,13 @@ package edu.northeastern.cs5200.controller;
 
 import java.util.List;
 
+import javax.transaction.Transactional;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import edu.northeastern.cs5200.model.*;
@@ -36,9 +39,15 @@ public class CompanyController {
 		return c;
 	}
 	
-	@RequestMapping("/api/get")
+	@RequestMapping(value="/api/companies/", method=RequestMethod.GET)
 	public List<Company> getCompanies() {
 		return this.companyRepository.findAllCompaniesDetailed();
+	}
+	
+	@RequestMapping(value="/api/companies/search/", method=RequestMethod.GET)
+	@Transactional
+	public List<Company> getCompaniesByName(@RequestParam("text") String text) {
+		return this.companyRepository.findCompaniesByName(text);
 	}
 	
 	@RequestMapping(value="/api/companies/", method=RequestMethod.POST)
@@ -46,5 +55,6 @@ public class CompanyController {
 		this.companyRepository.save(company);
 		return 1;
 	}
+
 
 }

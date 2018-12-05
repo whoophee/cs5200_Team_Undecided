@@ -8,6 +8,8 @@ import sections from './component/page/section/index';
 import student from './component/page/student-home/index';
 import logout from './component/page/logout/index';
 import professor from './component/page/professor-home/index';
+import companies from './component/page/company-search/index';
+import home from './component/page/home/index';
 import './App.css';
 import { Layout, Menu } from 'antd';
 import Nav from './Nav';
@@ -20,7 +22,7 @@ class App extends Component {
           <Layout.Header>
             <Route path="/" component={Nav}/>
           </Layout.Header>
-          <Route path="/" exact render={() => "Home"}/>
+          <Route path="/" exact component={home}/>
           <Route path="/school/" component={school}/>
           <Route path="/login/" component={login}/>
           <Route path="/register/" component={register}/>
@@ -28,7 +30,8 @@ class App extends Component {
           <Route path="/sections/:sectionId/:questionId?/" exact component={sections}/>
           <Route path="/student/" component={student}/>
           <Route path="/logout/" exact component={logout}/>
-          <Route path="/professor" component={professor}/>
+          <Route path="/professor/" component={professor}/>
+          <Route path="/companies/" component={companies}/>
         </Layout>
       </Router>
     );

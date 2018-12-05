@@ -11,6 +11,12 @@ import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 public class Company extends User {
 	@OneToMany(mappedBy="company")
 	private List<CareerEvent> careerEvents;
+	
+	@Lob
+	private String description;
+	private String headquartersText;
+	private String size;
+	private String industry;
 
 	public Company() {
 		this.careerEvents = new ArrayList<>();
@@ -23,6 +29,38 @@ public class Company extends User {
 
 	public void setCareerEvents(List<CareerEvent> careerEvents) {
 		this.careerEvents = careerEvents;
+	}
+
+	public String getDescription() {
+		return description;
+	}
+
+	public void setDescription(String description) {
+		this.description = description;
+	}
+
+	public String getHeadquartersText() {
+		return headquartersText;
+	}
+
+	public void setHeadquartersText(String headquartersText) {
+		this.headquartersText = headquartersText;
+	}
+
+	public String getSize() {
+		return size;
+	}
+
+	public void setSize(String size) {
+		this.size = size;
+	}
+
+	public String getIndustry() {
+		return industry;
+	}
+
+	public void setIndustry(String industry) {
+		this.industry = industry;
 	}
 	
 	
