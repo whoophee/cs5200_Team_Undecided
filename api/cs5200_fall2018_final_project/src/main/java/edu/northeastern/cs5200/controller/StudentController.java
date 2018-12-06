@@ -3,8 +3,10 @@ package edu.northeastern.cs5200.controller;
 import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.transaction.Transactional;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -24,11 +26,16 @@ public class StudentController {
 	private SectionRepository sectionRepository;
 	@Autowired
 	private EnrollmentRepository enrollmentRepository;
+	@Autowired
+	private RegistrationRepository registrationRepository;
+	@Autowired
+	private CareerEventRepository eventRepository;
 	
 	static class IDContainer {
 		public int id;
 	}
 	@RequestMapping(value="/api/me/enroll/", method=RequestMethod.POST)
+	@Transactional
 	public int enrollInSection(
 			@RequestBody IDContainer idContainer,
 			HttpServletRequest request,
@@ -42,14 +49,31 @@ public class StudentController {
 	}
 
 	@RequestMapping(value="/api/students/", method=RequestMethod.POST)
+	@Transactional
 	public int registerStudent(@RequestBody Student student) {
 		this.studentRepository.save(student);
 		return 1;
 	}
 	
 	@RequestMapping(value="/api/me/students/", method=RequestMethod.GET)
+	@Transactional
 	public List<Student> registerStudent(@CurrentUser School school) {
 		return this.studentRepository.getStudentsForSchool(school.getId());
+	}
+	
+	static class RegistrationBody { public int event; }
+	@RequestMapping(value="/api/students/me/registrations/", method=RequestMethod.POST)
+	@Transactional
+	public int registerMeForEvent(@CurrentUser Student student, @RequestBody RegistrationBody eventId) {
+		Registration r = new Registration(new Registration.RegistrationId(student, this.eventRepository.getOne(eventId.event)));
+		this.registrationRepository.save(r);
+		return 0;
+	}
+	
+	@RequestMapping(value="/api/students/me/registrations/{id}/", method=RequestMethod.GET)
+	@Transactional
+	public Registration getRegistrationForMe(@CurrentUser Student student, @PathVariable("id") int eventId) {
+		return this.registrationRepository.getRegistrationForStudent(student.getId(), eventId).orElseGet(() -> null);
 	}
 	
 }

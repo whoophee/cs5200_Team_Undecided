@@ -20,3 +20,16 @@ export async function searchCompanies(text) {
         .query({text});
     return makeObjectGraph(result.body);
 }
+
+export async function getCompanyWithCareerEvents(id) {
+    const result = await request
+        .get('/api/companies/' + id + '/');
+    return makeObjectGraph(result.body);
+};
+
+export async function updateMe(newUser) {
+    const result = await request
+        .put('/api/companies/me/')
+        .send(newUser);
+    return result.body;
+}

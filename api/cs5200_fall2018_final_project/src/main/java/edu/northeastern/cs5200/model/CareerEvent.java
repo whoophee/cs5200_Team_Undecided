@@ -1,13 +1,25 @@
 package edu.northeastern.cs5200.model;
 
+import java.io.IOException;
 import java.time.LocalDateTime;
+import java.util.List;
+import java.util.stream.Collectors;
 
 import javax.persistence.*;
 
+import org.springframework.beans.factory.annotation.Autowired;
+
 import com.fasterxml.jackson.annotation.JsonIdentityInfo;
+import com.fasterxml.jackson.annotation.JsonTypeInfo;
 import com.fasterxml.jackson.annotation.ObjectIdGenerators;
+import com.fasterxml.jackson.core.JsonParser;
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.DeserializationContext;
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 
 import edu.northeastern.cs5200.model.util.EasyToDeserializeObjectIdGenerator;
+import edu.northeastern.cs5200.model.util.ManyToOneDeserializer;
+import edu.northeastern.cs5200.repository.SchoolRepository;
 
 @Entity
 @JsonIdentityInfo(generator = EasyToDeserializeObjectIdGenerator.class, property = "@id")
@@ -19,7 +31,11 @@ public class CareerEvent {
 	private int id;
 	@ManyToOne(optional=false)
 	private Company company;
+	@OneToMany(mappedBy="id.event")
+	private List<Registration> registrations;
 	@ManyToOne
+	@JsonDeserialize(using=CareerEventSchoolDeserializer.class)
+	@JsonTypeInfo(use = JsonTypeInfo.Id.NONE)
 	private School school;
 	private LocalDateTime start;
 	@Column(name="endTime")
@@ -96,5 +112,34 @@ public class CareerEvent {
 		this.location = location;
 	}
 
+	public List<Registration> getRegistrations() {
+		return registrations;
+	}
+
+	public void setRegistrations(List<Registration> registrations) {
+		this.registrations = registrations;
+	}
+
+	public List<Student> getAttendees() {
+		if (!org.hibernate.Hibernate.isInitialized(this.registrations)) {
+			return null;
+		}
+		return this.registrations.stream()
+				.map((Registration r) -> r.getId().getStudent())
+				.collect(Collectors.toList());
+	}
+
+	static class CareerEventSchoolDeserializer extends ManyToOneDeserializer<School> {
+		@Autowired
+		private SchoolRepository schoolRepository;
+		@Override
+		public School deserialize(JsonParser p, DeserializationContext ctxt)
+				throws IOException, JsonProcessingException {
+			int id = p.getIntValue();
+			return this.schoolRepository.getOne(id);
+		}
+	}
+	
+	
 	
 }

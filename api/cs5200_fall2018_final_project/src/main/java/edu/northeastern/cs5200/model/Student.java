@@ -22,6 +22,8 @@ public class Student extends User {
 
 	@OneToMany(mappedBy="id.student")
 	private List<Enrollment> enrollments;
+	@OneToMany(mappedBy="id.student")
+	private List<Registration> registrations;
 	@ManyToOne
 	@JsonDeserialize(using=StudentSchoolDeserializer.class)
 	@JsonTypeInfo(use = JsonTypeInfo.Id.NONE)
@@ -43,6 +45,13 @@ public class Student extends User {
 		this.school = school;
 	}
 	
+	public List<Registration> getRegistrations() {
+		return registrations;
+	}
+	public void setRegistrations(List<Registration> registrations) {
+		this.registrations = registrations;
+	}
+
 	static class StudentSchoolDeserializer extends ManyToOneDeserializer<School> {
 		@Autowired
 		private SchoolRepository schoolRepository;

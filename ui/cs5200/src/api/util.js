@@ -9,13 +9,13 @@ export function makeObjectGraph(apiResult, mapping = {}) {
         if (apiResult.hasOwnProperty('@id')) {
             const key = apiResult['@id'];
 
-            const {type, id} = key;
+            const {__type: type, __id: id} = key;
             if (!mapping.hasOwnProperty(type)) {
                 mapping[type] = {};
             }
             const result = {};
             mapping[type][id] = result;
-            Object.keys(apiResult).forEach(key => {
+            [...Object.keys(apiResult)].sort().forEach(key => {
                 const value = apiResult[key];
                 if (key !== '@id') {
                     result[key] = makeObjectGraph(value, mapping);
@@ -24,9 +24,9 @@ export function makeObjectGraph(apiResult, mapping = {}) {
                 }
             });
             return result;
-        } else if (apiResult.hasOwnProperty('type') && apiResult.hasOwnProperty('id')) {  
-            const {type, id} = apiResult;
-            return mapping[type][id];
+        } else if (apiResult.hasOwnProperty('__type') && apiResult.hasOwnProperty('__id')) {  
+            const {__type, __id} = apiResult;
+            return mapping[__type][__id];
         } else {
             return apiResult;
         }

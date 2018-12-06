@@ -3,8 +3,8 @@ import { Layout, Button, Input, Icon } from 'antd';
 import { Link } from 'react-router-dom';
 
 class Home extends React.Component {
-    _handleSearch = (e) => {
-        this.props.history.push('/companies/?q=' + encodeURI(e.target.value || ''))
+    _handleSearch = (value) => {
+        this.props.history.push('/companies/?q=' + encodeURI(value || ''))
     };
     render() {
         return (
@@ -12,7 +12,7 @@ class Home extends React.Component {
                 <Layout.Content style={{padding: '24px 10px', margin: '0 100px', backgroundColor: '#fff'}}>
                     <div style={{width: '100%'}}>
                         <div style={{display: 'flex', width: '100%', alignItems: 'center', flexDirection: 'column'}}>
-                            <h1 style={{color: '#222'}}>The super simple, wholly priceless, question and answer website</h1>
+                            <h1 style={{color: '#222'}}>The super simple, entirely priceless, question and answer website</h1>
                             <h2 style={{color: '#888'}}>Use less time and assist students in learning using the power of classroom</h2>
                             <h3>You Can...</h3>
                             <div style={{display: 'flex'}}>
@@ -35,15 +35,15 @@ class Home extends React.Component {
                             </div>
                             <h2>Are you a student, professor, school, or company?</h2>
                             <div>
-                            <Button type="primary" style={{width: '400px', height: '50px', display: 'inline-block'}}><Link to="/register/">Register Here</Link></Button>
+                            <Button type="primary" style={{width: '400px', height: '50px', display: 'inline-block'}}><Link to="/login/">Log In</Link></Button>
                             {" Or "}
-                            <Button type="primary" style={{width: '400px', height: '50px', display: 'inline-block'}}><Link to="/login/">Login</Link></Button>
+                            <Button type="primary" style={{width: '400px', height: '50px', display: 'inline-block'}}><Link to="/register/">Register Now</Link></Button>
                             </div>
                             
                             <br/>
                             <h2>Just browsing? Search for companies here:</h2>
                             <div style={{padding: '0 30px', width: '100%'}}>
-                                <Input placeholder="company name" onPressEnter={this._handleSearch}/>
+                                <Input.Search placeholder="Search for Companies!" onSearch={this._handleSearch}/>
                             </div>
                             
                         </div>

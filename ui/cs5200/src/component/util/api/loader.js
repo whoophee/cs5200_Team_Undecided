@@ -35,7 +35,8 @@ class Component extends React.Component {
         super();
         this.state = {
             data: null,
-            status: "unloaded"
+            status: "unloaded",
+            initLoad: false
         };
     }
     componentDidMount() {
@@ -51,7 +52,8 @@ class Component extends React.Component {
             .then((data) => {
                 this.setState({
                     data,
-                    status: "loaded"
+                    status: "loaded",
+                    initLoad: true
                 })
             })
             .catch((err) => {
@@ -75,7 +77,7 @@ class Component extends React.Component {
     render() {
         const Child = this.props.component;
 
-        if (this.state.data != null) {
+        if (this.state.initLoad) {
             return <Child {...this.props.mapLoadToProps(this.state.data)} loadStatus={this.state.status} reload={this._reload} {...this.props}/>;
         }
         return <Spin/>

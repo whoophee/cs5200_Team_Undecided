@@ -2,6 +2,8 @@ package edu.northeastern.cs5200.controller;
 
 import java.util.List;
 
+import javax.transaction.Transactional;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -21,6 +23,7 @@ public class ClassController {
 	private ClassRepository classRepository;
 
 	@RequestMapping(value="/api/school/me/classes/", method=RequestMethod.GET)
+	@Transactional
 	public List<Class> getClassesForMe(@CurrentUser User currentUser) {
 		if (currentUser instanceof School) {
 			return this.classRepository.findClassesForSchool(currentUser.getId());
@@ -31,11 +34,13 @@ public class ClassController {
 	}
 	
 	@RequestMapping(value="/api/classes/{id}/", method=RequestMethod.GET)
+	@Transactional
 	public Class getClassWithSections(@PathVariable("id") int id) {
 		return this.classRepository.getClassWithSections(id);
 	}
 	
 	@RequestMapping(value="/api/school/me/classes/", method=RequestMethod.POST)
+	@Transactional
 	public int addClassForSchool(
 			@CurrentUser School currentUser,
 			@RequestBody Class classData) {

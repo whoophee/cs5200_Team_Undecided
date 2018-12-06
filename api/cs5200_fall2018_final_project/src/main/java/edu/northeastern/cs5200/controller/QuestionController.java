@@ -5,6 +5,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
+import javax.transaction.Transactional;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -29,6 +31,7 @@ public class QuestionController {
 	private AnswerRepository answerRepository;
 
 	@RequestMapping(path="/api/sections/{sectionId}/questions/", method=RequestMethod.POST)
+	@Transactional
 	public int addQuestion(
 			@CurrentUser Student student,
 			@PathVariable("sectionId") int sectionId,
@@ -41,6 +44,7 @@ public class QuestionController {
 	}
 	
 	@RequestMapping(path="/api/questions/{questionId}/answers/", method=RequestMethod.POST)
+	@Transactional
 	public int addStudentAnswerToQuestion(
 			@PathVariable("questionId") int questionId,
 			@CurrentUser Student student,
@@ -57,6 +61,7 @@ public class QuestionController {
 	}
 	
 	@RequestMapping(path="/api/questions/{questionId}/", method=RequestMethod.GET)
+	@Transactional
 	public Question getQuestionWithAnswers(@PathVariable("questionId") int id) {
 		return this.questionRepository.getQuestionWithAnswers(id);
 	}

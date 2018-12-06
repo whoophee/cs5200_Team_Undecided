@@ -6,6 +6,7 @@ import java.util.stream.Collectors;
 
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletResponse;
+import javax.transaction.Transactional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.jpa.repository.Query;
@@ -36,6 +37,7 @@ public class UserController {
 	}
 	
 	@RequestMapping(value="/api/users/me/", method=RequestMethod.GET)
+	@Transactional
 	public User getLoggedInUser(
 			@CookieValue(value="token", required=false) String token,
 			@CookieValue(value="username", required=false) String username) {
@@ -44,6 +46,7 @@ public class UserController {
 	}
 
 	@RequestMapping(value="/api/users/login/", method=RequestMethod.POST)
+	@Transactional
 	public User loginUser(
 			@RequestParam("username") String username,
 			@RequestParam("password") String password,
@@ -72,6 +75,7 @@ public class UserController {
 	}
 	
 	@RequestMapping(value="/api/me/contacts/", method=RequestMethod.GET)
+	@Transactional
 	public List<User> getConversationPartnersForUser(
 			@CurrentUser User user,
 			@RequestParam("name") String query) {

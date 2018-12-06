@@ -5,6 +5,7 @@ import edu.northeastern.cs5200.repository.UserRepository;
 
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
+import javax.transaction.Transactional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.MethodParameter;
@@ -27,6 +28,7 @@ public class CurrentUserResolver implements HandlerMethodArgumentResolver {
 	}
 
 	@Override
+	@Transactional
 	public Object resolveArgument(MethodParameter parameter, ModelAndViewContainer mavContainer,
 			NativeWebRequest webRequest, WebDataBinderFactory binderFactory) throws Exception {
 		HttpServletRequest req = (HttpServletRequest)webRequest.getNativeRequest();

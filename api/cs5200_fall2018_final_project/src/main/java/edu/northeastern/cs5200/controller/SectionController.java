@@ -3,6 +3,8 @@ package edu.northeastern.cs5200.controller;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.transaction.Transactional;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -24,6 +26,7 @@ public class SectionController {
 	private ProfessorRepository professorRepository;
 
 	@RequestMapping(value="/api/me/sections/", method=RequestMethod.GET)
+	@Transactional
 	public List<Section> getSectionsForMe(@CurrentUser User currentUser) {
 		if (currentUser instanceof School) {
 			return this.sectionRepository.findSectionsForSchool(currentUser.getId());
@@ -36,6 +39,7 @@ public class SectionController {
 	}
 	
 	@RequestMapping(value="/api/sections/{id}/", method=RequestMethod.PATCH)
+	@Transactional
 	public int patchSection(
 			@CurrentUser User currentUser,
 			@RequestBody Section section,
@@ -46,6 +50,7 @@ public class SectionController {
 	}
 	
 	@RequestMapping(value="/api/professors/{professorId}/sections/", method=RequestMethod.POST)
+	@Transactional
 	public int addSectionToClass(
 			@CurrentUser User currentUser,
 			@PathVariable("professorId") int professorId,
@@ -63,12 +68,14 @@ public class SectionController {
 	}
 	
 	@RequestMapping(value="/api/sections/{id}/", method=RequestMethod.GET)
+	@Transactional
 	public Section getSectionWithQuestions(
 			@PathVariable("id") int id) {
 		return this.sectionRepository.getSectionWithQuestions(id);
 	}
 	
 	@RequestMapping(value="/api/sections/search/", method=RequestMethod.GET)
+	@Transactional
 	public List<Section> getSectionsByName(
 			@RequestParam("name") String name,
 			@CurrentUser Student student) {

@@ -53,20 +53,20 @@ public class EasyToDeserializeObjectIdGenerator extends ObjectIdGenerator<Object
 	
 }
 class ObjectId {
-	public long id;
-	public String type;
+	public long __id;
+	public String __type;
 	
 	ObjectId(long id, String type) {
-		this.id = id;
-		this.type = type;
+		this.__id = id;
+		this.__type = type;
 	}
 
 	@Override
 	public int hashCode() {
 		final int prime = 31;
 		int result = 1;
-		result = prime * result + (int) (id ^ (id >>> 32));
-		result = prime * result + ((type == null) ? 0 : type.hashCode());
+		result = prime * result + (int) (__id ^ (__id >>> 32));
+		result = prime * result + ((__type == null) ? 0 : __type.hashCode());
 		return result;
 	}
 
@@ -79,12 +79,12 @@ class ObjectId {
 		if (getClass() != obj.getClass())
 			return false;
 		ObjectId other = (ObjectId) obj;
-		if (id != other.id)
+		if (__id != other.__id)
 			return false;
-		if (type == null) {
-			if (other.type != null)
+		if (__type == null) {
+			if (other.__type != null)
 				return false;
-		} else if (!type.equals(other.type))
+		} else if (!__type.equals(other.__type))
 			return false;
 		return true;
 	}

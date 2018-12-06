@@ -19,7 +19,7 @@ class Component extends React.Component {
 
 export const update = updatee;
 
-getLoggedInUserData().then(body => update(() => ({user: body})));
+export const reloadData = () => getLoggedInUserData().then(body => update(() => ({user: body})));
 
 export const WithUser = (child) => {
     const datastore = {
@@ -42,5 +42,7 @@ export const NeedsUser = (userTypes, elseRender = (props) => null) => (Child) =>
     if (userTypes.indexOf(getUserType(props.user)) < 0) return elseRender(props);
     return <Child {...props}/>;
 });
+
+reloadData();
 
 export default Component;

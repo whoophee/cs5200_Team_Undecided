@@ -10,6 +10,8 @@ import org.springframework.context.annotation.PropertySource;
 import org.springframework.http.converter.json.Jackson2ObjectMapperBuilder;
 import org.springframework.http.converter.json.SpringHandlerInstantiator;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
+
+import com.fasterxml.jackson.databind.MapperFeature;
 import com.fasterxml.jackson.databind.Module;
 import com.fasterxml.jackson.databind.cfg.HandlerInstantiator;
 import com.fasterxml.jackson.datatype.hibernate5.Hibernate5Module;
@@ -37,7 +39,8 @@ public class WebConfig implements WebMvcConfigurer {
 	public Jackson2ObjectMapperBuilder objectMapperBuilder(HandlerInstantiator handlerInstantiator) {
 	    return new Jackson2ObjectMapperBuilder()
 	    	.handlerInstantiator(handlerInstantiator)
-	    	.modulesToInstall(Hibernate5Module.class);
+	    	.modulesToInstall(Hibernate5Module.class)
+	    	.featuresToEnable(MapperFeature.SORT_PROPERTIES_ALPHABETICALLY);
 	}
 	
 
