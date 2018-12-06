@@ -1,7 +1,9 @@
 package edu.northeastern.cs5200.model;
 
 import java.io.IOException;
+import java.time.Instant;
 import java.time.LocalDateTime;
+import java.time.ZoneId;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -37,8 +39,12 @@ public class CareerEvent {
 	@JsonDeserialize(using=CareerEventSchoolDeserializer.class)
 	@JsonTypeInfo(use = JsonTypeInfo.Id.NONE)
 	private School school;
+	@JsonDeserialize(using=CareerEventDateTimeDeserializer.class)
+	@JsonTypeInfo(use = JsonTypeInfo.Id.NONE)
 	private LocalDateTime start;
 	@Column(name="endTime")
+	@JsonDeserialize(using=CareerEventDateTimeDeserializer.class)
+	@JsonTypeInfo(use = JsonTypeInfo.Id.NONE)
 	private LocalDateTime end;
 	private String name;
 	private String description;
@@ -138,6 +144,17 @@ public class CareerEvent {
 			int id = p.getIntValue();
 			return this.schoolRepository.getOne(id);
 		}
+	}
+	
+	static class CareerEventDateTimeDeserializer extends ManyToOneDeserializer<LocalDateTime> {
+
+		@Override
+		public LocalDateTime deserialize(JsonParser p, DeserializationContext ctxt)
+				throws IOException, JsonProcessingException {
+			long l = p.getLongValue();
+			return LocalDateTime.ofInstant(Instant.ofEpochMilli(l), ZoneId.of("UTC"));
+		}
+		
 	}
 	
 	

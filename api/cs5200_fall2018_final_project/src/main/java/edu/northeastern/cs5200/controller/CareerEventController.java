@@ -1,5 +1,7 @@
 package edu.northeastern.cs5200.controller;
 
+import java.time.LocalDateTime;
+import java.time.ZoneOffset;
 import java.util.Collections;
 import java.util.List;
 
@@ -33,6 +35,12 @@ public class CareerEventController {
 		if (user instanceof Company) {
 			Company company = (Company) user;
 			return this.careerRepository.getCareerEventsForCompany(company.getId());
+		} else if (user instanceof Student) {
+			Student student = (Student) user;
+			return this.careerRepository.getCareerEventsForSchool(student.getSchool().getId(), LocalDateTime.now());
+		} else if (user instanceof School) {
+			School school = (School) user;
+			return this.careerRepository.getCareerEventsForSchool(school.getId(), LocalDateTime.ofEpochSecond(0, 0, ZoneOffset.UTC));
 		}
 		return null;
 	}

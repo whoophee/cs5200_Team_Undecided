@@ -3,6 +3,7 @@ import { Layout, Row, AutoComplete, Button, List } from 'antd';
 import { WithLoader } from '../../util/api/loader';
 import { getSectionsForMe, getSectionsByName, enrollMeInSection } from '../../../api/section';
 import { Link } from "react-router-dom";
+import CareerEvents from './career-events';
 
 class StudentHome extends React.Component {
     constructor(props) {
@@ -89,6 +90,8 @@ class StudentHome extends React.Component {
                     {this._renderSectionRegister()}
                     <Row><h2>My Sections</h2></Row>
                     {this._renderMySections()}
+                    <Row><h2>Upcoming Career Events</h2></Row>
+                    <CareerEvents/>
                 </Layout.Content>
             </Layout>
         )

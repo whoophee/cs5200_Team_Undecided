@@ -1,6 +1,8 @@
 import React from 'react';
 import { Layout, Button, Input, Icon } from 'antd';
 import { Link } from 'react-router-dom';
+import { WithUser, getUserType } from '../../util/datastore/user';
+import { Redirect } from 'react-router-dom';
 
 class Home extends React.Component {
     _handleSearch = (value) => {
@@ -9,6 +11,10 @@ class Home extends React.Component {
     render() {
         return (
             <Layout>
+                {getUserType(this.props.user) === 'student' && <Redirect to="/student/"/>}
+                {getUserType(this.props.user) === 'professor' && <Redirect to="/professor/"/>}
+                {getUserType(this.props.user) === 'company' && <Redirect to="/company/"/>}
+                {getUserType(this.props.user) === 'school' && <Redirect to="/school/"/>}
                 <Layout.Content style={{padding: '24px 10px', margin: '0 100px', backgroundColor: '#fff'}}>
                     <div style={{width: '100%'}}>
                         <div style={{display: 'flex', width: '100%', alignItems: 'center', flexDirection: 'column'}}>
@@ -55,4 +61,4 @@ class Home extends React.Component {
     }
 }
 
-export default Home;
+export default WithUser(Home);

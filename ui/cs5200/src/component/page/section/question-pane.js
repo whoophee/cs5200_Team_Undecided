@@ -1,12 +1,15 @@
 import React from 'react';
 import { Row, Card, Spin } from 'antd';
 import { WithLoader } from '../../util/api/loader';
-import { getQuestionWithAnswers, addAnswerToQuestion } from '../../../api/question';
+import { getQuestionWithAnswers, addAnswerToQuestion, addProfessorAnswerToQuestion } from '../../../api/question';
+import { getNote } from '../../../api/note';
 import AnswerComposer from './answer-composer';
+import { WithUser, getUserType } from '../../util/datastore/user';
+
 
 class QuestionPane extends React.Component {
     _renderAnswers() {
-        const answers = this.props.question.answers;
+        const answers = this.props.question.answers || [];
         return (
             <Row style={{flexGrow: 1, overflowY: 'scroll'}}>
                 <Spin spinning={this.props.loadStatus === 'loading'}>  
@@ -14,7 +17,7 @@ class QuestionPane extends React.Component {
                 {answers.map(answer => {
                     return (
                         <Row key={answer.id}>
-                            <Card title={answer.enrollment.id.student.name}>
+                            <Card style={{backgroundColor: !answer.enrollment && '#fafafa', borderWidth: !answer.enrollment && '3px'}} title={answer.enrollment ? answer.enrollment.id.student.name : 'Professor ' + answer.section.professor.name}>
                                 {answer.text}
                             </Card>
                         </Row>
@@ -34,8 +37,27 @@ class QuestionPane extends React.Component {
             </Row>
         );
     }
+    _renderNote() {
+        const note = this.props.question;
+        return (
+            <Row>
+                <Card title={note.title}>
+                    {note.body}
+                </Card>
+            </Row>
+        );
+    }
+    _addAnswerOrProfAnswerToQuestion = (questionId, answer) => {
+        if (getUserType(this.props.user) === 'student') {
+            return addAnswerToQuestion(questionId, answer);
+        } else if (getUserType(this.props.user) === 'professor') {
+            return addProfessorAnswerToQuestion(questionId, answer);
+        } else {
+            return Promise.resolve();
+        }
+    };
     _handleAnswer = (values) => {
-        addAnswerToQuestion(this.props.question.id, values).then(() => this.props.reload());
+        this._addAnswerOrProfAnswerToQuestion(this.props.question.id, values).then(() => this.props.reload());
     };
     _renderAnswerComposer() {
         return (
@@ -52,15 +74,24 @@ class QuestionPane extends React.Component {
                 display: 'flex',
                 flexDirection: 'column'
             }}>
-                {this._renderQuestion()}
-                {this._renderAnswers()}
-                {this._renderAnswerComposer()}
+                {this.props.postId == null && this._renderQuestion()}
+                {this.props.postId == null && this._renderAnswers()}
+                {this.props.postId == null && this._renderAnswerComposer()}
+                {this.props.postId != null && this._renderNote()}
             </div>
         );
     }
 }
 
-export default WithLoader(getQuestionWithAnswers, {
-    loadArg: (props) => props.questionId,
+const getQuestionOrNoteWithAnswers = ([questionId, postId]) => {
+    if (postId != null) {
+        return getNote(postId);
+    } else {
+        return getQuestionWithAnswers(questionId);
+    }
+};
+
+export default WithUser(WithLoader(getQuestionOrNoteWithAnswers, {
+    loadArg: (props) => [props.questionId, props.postId],
     mapLoadToProps: (question) => ({question})
-})(QuestionPane);
+})(QuestionPane));

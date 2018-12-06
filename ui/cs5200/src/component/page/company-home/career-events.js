@@ -1,5 +1,5 @@
 import React from 'react';
-import { List, Button, Row, Icon, Form, Modal, Spin, Input } from 'antd';
+import { List, Button, Row, Icon, Form, Modal, Spin, Input, DatePicker } from 'antd';
 import { WithLoader } from '../../util/api/loader';
 import { Link } from 'react-router-dom';
 import { getCareerEventsForMe, addCareerEventForMe } from '../../../api/career-events';
@@ -49,6 +49,14 @@ class AddCareerEventModalInner extends React.Component {
                                 <Input.TextArea/>
                             )}
                         </Form.Item>
+                        <Form.Item label="Date/Time">
+                            {getFieldDecorator('date', {
+                                rules: [{required: true, message: "Please select a date/time"}]
+                            })(
+                                <DatePicker.RangePicker showTime/>
+                            )}
+                        </Form.Item>
+
                     </Form>
                 </Spin>
             </Modal>  
@@ -76,7 +84,9 @@ export class CareerEventsPage extends React.Component {
                     name: values.name,
                     school: values.school,
                     description: values.description,
-                    location: values.location
+                    location: values.location,
+                    start: values.date[0].valueOf(),
+                    end: values.date[1].valueOf()
                 }).then(() => {
                 form.resetFields();
                 this.setState({
@@ -116,7 +126,7 @@ export class CareerEventsPage extends React.Component {
                             
                         </List.Item>
                     );
-                })};
+                })}
             </List>
         );
     }

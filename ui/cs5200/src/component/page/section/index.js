@@ -3,20 +3,20 @@ import { Layout, Spin } from 'antd';
 import QuestionPane from './question-pane';
 import QuestionMenu from './question-menu';
 import { WithLoader } from '../../util/api/loader';
-import { getSectionWithQuestions } from '../../../api/section';
+import { getSectionWithQuestions, getUserType } from '../../../api/section';
 
 class SectionPage extends React.Component {
     _renderSider() {
-        const {sectionId, questionId} = this.props.match.params;
-        const questions = this.props.section.questions;
+        const {sectionId, questionId, postId} = this.props.match.params;
+        const posts = this.props.section.posts;
         const reload = this.props.reload;
-        return <QuestionMenu reload={reload} sectionId={sectionId} questionId={questionId} questions={questions}/>
+        return <QuestionMenu reload={reload} sectionId={sectionId} questionId={questionId} postId={postId} posts={posts}/>
     }
 
     _renderContent() {
-        const {sectionId, questionId} = this.props.match.params;
+        const {sectionId, questionId, postId} = this.props.match.params;
         if (questionId == null) return "No Question Selected";
-        return <QuestionPane sectionId={sectionId} questionId={questionId}/>;
+        return <QuestionPane sectionId={sectionId} questionId={questionId} postId={postId}/>;
     }
     render() {
         

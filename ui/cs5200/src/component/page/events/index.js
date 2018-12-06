@@ -5,6 +5,12 @@ import { WithLoader } from '../../util/api/loader';
 import { getCareerEvent } from '../../../api/career-events';
 import AttendeesList from './attendees-list';
 import RegisterButton from './register-button';
+import moment from 'moment';
+
+const toTimeString = (start, end) => {
+    console.log(start, end);
+    return moment.utc(start).format('LLLL') + ' - ' + moment.utc(end).format('LLLL');
+};
 
 class EventPage extends React.Component {
     render() {
@@ -18,7 +24,8 @@ class EventPage extends React.Component {
                             description={
                                 <div>
                                     School: {event.school.name}<br/>
-                                    Location: {event.location}
+                                    Location: {event.location}<br/>
+                                    Date/Time: {toTimeString(event.start, event.end)}
                                 </div>
                             }/>
                         <br/>

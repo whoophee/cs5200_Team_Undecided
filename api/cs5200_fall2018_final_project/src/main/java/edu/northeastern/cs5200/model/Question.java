@@ -9,10 +9,11 @@ import com.fasterxml.jackson.annotation.JsonIdentityInfo;
 import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 
 import edu.northeastern.cs5200.model.util.EasyToDeserializeObjectIdGenerator;
+import edu.northeastern.cs5200.model.util.HasPostedOn;
 
 @Entity
 @JsonIdentityInfo(generator = EasyToDeserializeObjectIdGenerator.class, property = "@id")
-public class Question {
+public class Question implements HasPostedOn {
 	@Id
 	@GeneratedValue(strategy=GenerationType.IDENTITY)
 	private int id;
@@ -77,6 +78,11 @@ public class Question {
 
 	public void setAskedOn(LocalDateTime askedOn) {
 		this.askedOn = askedOn;
+	}
+
+	@Override
+	public LocalDateTime getPostedOn() {
+		return this.getAskedOn();
 	}
 	
 	

@@ -13,8 +13,10 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
 import com.fasterxml.jackson.databind.MapperFeature;
 import com.fasterxml.jackson.databind.Module;
+import com.fasterxml.jackson.databind.SerializationFeature;
 import com.fasterxml.jackson.databind.cfg.HandlerInstantiator;
 import com.fasterxml.jackson.datatype.hibernate5.Hibernate5Module;
+import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 
 import edu.northeastern.cs5200.resolvers.CurrentUserResolver;
 
@@ -40,7 +42,9 @@ public class WebConfig implements WebMvcConfigurer {
 	    return new Jackson2ObjectMapperBuilder()
 	    	.handlerInstantiator(handlerInstantiator)
 	    	.modulesToInstall(Hibernate5Module.class)
-	    	.featuresToEnable(MapperFeature.SORT_PROPERTIES_ALPHABETICALLY);
+	    	.modules(new JavaTimeModule())
+	    	.featuresToEnable(MapperFeature.SORT_PROPERTIES_ALPHABETICALLY)
+	    	.featuresToDisable(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS);
 	}
 	
 

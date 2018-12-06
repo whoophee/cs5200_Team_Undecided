@@ -3,7 +3,7 @@ import { Menu, Input } from 'antd';
 import { Link } from 'react-router-dom';
 import React from 'react';
 
-const StudentHome = NeedsUser(['student'])(props => <Menu.Item {...props}><Link to="/student/">Sections</Link></Menu.Item>);
+const StudentHome = NeedsUser(['student'])(props => <Menu.Item {...props}><Link to="/student/">Home</Link></Menu.Item>);
 const SchoolHome = NeedsUser(['school'])(props => <Menu.Item {...props}><Link to="/school/">Home</Link></Menu.Item>);
 const ProfessorHome = NeedsUser(['professor'])(props => <Menu.Item {...props}><Link to="/professor/">Home</Link></Menu.Item>);
 const CompanyHome = NeedsUser(['company'])(props => <Menu.Item {...props}><Link to="/company/">Home</Link></Menu.Item>);

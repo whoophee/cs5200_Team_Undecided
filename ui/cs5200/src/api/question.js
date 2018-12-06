@@ -17,3 +17,9 @@ export async function addAnswerToQuestion(questionId, answer) {
         .send(answer);
     return result.body;
 }
+
+export async function addProfessorAnswerToQuestion(questionId, answer) {
+    const result = await request.post('/api/questions/' + questionId + '/answersP/')
+        .send(answer);
+    return result.body;
+}

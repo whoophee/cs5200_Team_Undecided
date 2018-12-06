@@ -16,6 +16,7 @@ import com.fasterxml.jackson.databind.DeserializationContext;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 
 import edu.northeastern.cs5200.model.util.EasyToDeserializeObjectIdGenerator;
+import edu.northeastern.cs5200.model.util.HasPostedOn;
 import edu.northeastern.cs5200.model.util.ManyToOneDeserializer;
 import edu.northeastern.cs5200.repository.ClassRepository;
 
@@ -123,6 +124,20 @@ public class Section {
 				.collect(Collectors.toList());
 	}
 
+	public List<HasPostedOn> getPosts() {
+		if (!org.hibernate.Hibernate.isInitialized(this.notes)) return null;
+		if (!org.hibernate.Hibernate.isInitialized(this.enrollments)) return null;
+		
+		List<HasPostedOn> posts = this.enrollments.stream()
+				.flatMap((Enrollment e) -> e.getQuestions().stream())
+				.collect(Collectors.toList());
+		posts.addAll(this.getNotes());
+		Collections.sort(posts, Collections.reverseOrder((HasPostedOn a, HasPostedOn b) -> {
+			return a.getPostedOn().compareTo(b.getPostedOn());
+		}));
+		
+		return posts;
+	}
 
 	static class ClassDeserializer extends ManyToOneDeserializer<Class> {
 		@Autowired

@@ -17,8 +17,5 @@ export async function addCareerEventForMe(careerEvent) {
 export async function getCareerEvent(id) {
     const result = await request
         .get('/api/careerevents/' + id + '/');
-    console.log('hmm');
-    const result2 = makeObjectGraph(result.body);
-    console.log(result2);
-    return result2;
+    return makeObjectGraph(result.body);
 }

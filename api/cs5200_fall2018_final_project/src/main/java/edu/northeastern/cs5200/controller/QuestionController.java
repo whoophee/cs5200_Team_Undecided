@@ -60,6 +60,22 @@ public class QuestionController {
 		return 1;
 	}
 	
+	@RequestMapping(path="/api/questions/{questionId}/answersP/", method=RequestMethod.POST)
+	@Transactional
+	public int addProfessorAnswerToQuestion(
+			@PathVariable("questionId") int questionId,
+			@CurrentUser Professor professor,
+			@RequestBody ProfessorAnswer answer) {
+		Question question = this.questionRepository.findById(questionId).get();
+		
+		answer.setQuestion(question);
+		answer.setSection(question.getEnrollment().getId().getSection());
+		answer.setPostedOn(LocalDateTime.now());
+		
+		this.answerRepository.save(answer);
+		return 1;
+	}
+	
 	@RequestMapping(path="/api/questions/{questionId}/", method=RequestMethod.GET)
 	@Transactional
 	public Question getQuestionWithAnswers(@PathVariable("questionId") int id) {
