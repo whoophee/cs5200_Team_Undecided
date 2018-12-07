@@ -25,7 +25,7 @@ class EditableEventsPageInner extends React.Component {
         const { getFieldDecorator } = this.props.form;
         return (
             <Layout>
-                <Layout.Content style={{padding: '24px 10px', margin: '0 100px', backgroundColor: '#fff', maxWidth: '100%', overflowY: 'scroll'}}>
+                <Layout.Content style={this.props.style || {padding: '24px 10px', margin: '0 100px', backgroundColor: '#fff', maxWidth: '100%', overflowY: 'scroll'}}>
                     <Card loading={this.props.loadStatus === 'loading'}>
                         <Card.Meta
                             title={<h2>Name: {getFieldDecorator('name', {
@@ -96,7 +96,7 @@ class EventPageView extends React.Component {
 }
 
 const EventPage = WithUser(props => {
-    if (getUserType(props.user) === 'company' && props.user.id === props.event.company.id) {
+    if ((getUserType(props.user) === 'company' && props.user.id === props.event.company.id) || getUserType(props.user) === 'admin') {
         return <EditableEventsPage {...props}/>;
     } else {
         return <EventPageView {...props}/>;

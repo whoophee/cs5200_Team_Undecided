@@ -22,4 +22,4 @@ class AttendeesList extends React.Component {
     }
 }
 
-export default NeedsUser(['company'])(AttendeesList);
+export default NeedsUser(['company', 'admin'])(AttendeesList);

@@ -35,7 +35,7 @@ export const getUserType = user => {
     if (user.hasOwnProperty('classes')) return 'school';
     if (user.hasOwnProperty('sections')) return 'professor';
     if (user.hasOwnProperty('careerEvents')) return 'company';
-    return null;
+    return 'admin';
 };
 
 export const NeedsUser = (userTypes, elseRender = (props) => null) => (Child) => WithUser((props) => {

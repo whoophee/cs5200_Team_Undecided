@@ -13,6 +13,7 @@ import home from './component/page/home/index';
 import companyProfile from './component/page/company-profile/index';
 import companyHome from './component/page/company-home/index';
 import careerEventDetail from './component/page/events/index';
+import admin from './component/page/admin-home/index';
 import './App.css';
 import { Layout, Menu } from 'antd';
 import Nav from './Nav';
@@ -38,6 +39,7 @@ class App extends Component {
           <Route path="/companies/:id/" exact component={companyProfile}/>
           <Route path="/company/" exact component={companyHome}/>
           <Route path="/events/:id/" exact component={careerEventDetail}/>
+          <Route path="/admin/" component={admin}/>
         </Layout>
       </Router>
     );

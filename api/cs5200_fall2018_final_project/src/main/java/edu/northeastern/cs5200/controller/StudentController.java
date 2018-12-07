@@ -76,4 +76,34 @@ public class StudentController {
 		return this.registrationRepository.getRegistrationForStudent(student.getId(), eventId).orElseGet(() -> null);
 	}
 	
+	@RequestMapping(value="/api/students/", method=RequestMethod.GET)
+	@Transactional
+	public List<Student> getStudent(@CurrentUser Admin admin) {
+		assert (admin != null);
+		return this.studentRepository.findAll();
+	}
+	
+	@RequestMapping(value="/api/students/{id}/", method=RequestMethod.DELETE)
+	public int deleteStudent(@CurrentUser Admin admin, @PathVariable("id") int id) {
+		assert (admin != null);
+		this.studentRepository.deleteById(id);
+		return 0;
+	}
+	
+	@RequestMapping(value="/api/students/{id}/", method=RequestMethod.GET)
+	public Student getStudent(@CurrentUser Admin admin, @PathVariable("id") int id) {
+		assert (admin != null);
+		return this.studentRepository.findById(id).get();
+	}
+	
+	@RequestMapping(value="/api/students/{id}/", method=RequestMethod.PUT)
+	public int editStudent(
+			@CurrentUser Admin admin,
+			@PathVariable("id") int id,
+			@RequestBody Student student) {
+		assert (admin != null);
+		assert (id == student.getId());
+		this.studentRepository.save(student);
+		return 0;
+	}
 }

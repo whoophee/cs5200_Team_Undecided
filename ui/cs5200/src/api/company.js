@@ -33,3 +33,14 @@ export async function updateMe(newUser) {
         .send(newUser);
     return result.body;
 }
+
+export async function deleteCompany(companyId) {
+    const result = await request.delete('/api/companies/' + companyId + '/');
+    return result.body;
+}
+
+export async function editCompany(obj) {
+    const result = await request.put('/api/companies/' + obj.id + '/')
+        .send(obj);
+    return result.body;
+}

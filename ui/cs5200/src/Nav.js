@@ -7,6 +7,7 @@ const StudentHome = NeedsUser(['student'])(props => <Menu.Item {...props}><Link 
 const SchoolHome = NeedsUser(['school'])(props => <Menu.Item {...props}><Link to="/school/">Home</Link></Menu.Item>);
 const ProfessorHome = NeedsUser(['professor'])(props => <Menu.Item {...props}><Link to="/professor/">Home</Link></Menu.Item>);
 const CompanyHome = NeedsUser(['company'])(props => <Menu.Item {...props}><Link to="/company/">Home</Link></Menu.Item>);
+const AdminHome = NeedsUser(['admin'])(props => <Menu.Item {...props}><Link to="/admin/">Home</Link></Menu.Item>);
 const Conversations = NeedsUser(['student', 'professor', 'company', 'school'])(props => <Menu.Item {...props}><Link to="/conversations/">Messages</Link></Menu.Item>);
 
 const Login = NeedsUser([null])(props => <Menu.Item {...props}><Link to="/login/">Login</Link></Menu.Item>);
@@ -23,12 +24,13 @@ export default (props) => {
         <Menu mode="horizontal"
               theme="dark"
               selectedKeys={[
-                  ['school', 'student', 'company', 'conversations', 'professor', 'login', 'register', 'logout'].find(item => props.location.pathname.indexOf(item) >= 0)
+                  ['admin', 'school', 'student', 'company', 'conversations', 'professor', 'login', 'register', 'logout'].find(item => props.location.pathname.indexOf(item) >= 0)
               ]}
               style={{height: '64px', lineHeight: '64px'}}>
             <Menu.Item><Link to="/"><span style={{color: 'white', verticalAlign: 'middle', fontSize: '32px'}}>Piazzza</span></Link></Menu.Item>
             <StudentHome key="student"/>
             <SchoolHome key="school"/>
+            <AdminHome key="admin"/>
             <ProfessorHome key="professor"/>
             <CompanyHome key="company"/>
             <Conversations key="conversations"/>

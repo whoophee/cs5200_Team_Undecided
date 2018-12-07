@@ -56,6 +56,19 @@ public class CareerEventController {
 		return 0;
 	}
 	
+	@RequestMapping(value="/api/companies/{companyId}/careerevents/", method=RequestMethod.POST)
+	@Transactional
+	public int addCareerEventForCompany(
+			@CurrentUser Admin admin,
+			@PathVariable("companyId") int companyId,
+			@RequestBody CareerEvent event) {
+		assert (admin != null);
+		event.setCompany(this.companyRepository.getOne(companyId));
+		event.setApproved(true);
+		this.careerRepository.save(event);
+		return 0;
+	}
+	
 	@RequestMapping(value="/api/careerevents/{id}/", method=RequestMethod.DELETE)
 	@Transactional
 	public int deleteEvent(
@@ -70,11 +83,18 @@ public class CareerEventController {
 	@RequestMapping(value="/api/careerevents/{id}/", method=RequestMethod.PUT)
 	@Transactional
 	public int updateEvent(
-			@CurrentUser Company company,
+			@CurrentUser User user,
 			@RequestBody CareerEvent event,
 			@PathVariable("id") int id) {
 		CareerEvent e = this.careerRepository.findById(id).get();
-		assert (company.getId() == e.getCompany().getId());
+		if (user instanceof Company) {
+			Company company = (Company) user;
+			assert (company.getId() == e.getCompany().getId());
+		} else if (user instanceof Admin) {
+			
+		} else {
+			throw new RuntimeException("uh oh");
+		}
 		e.setLocation(event.getLocation());
 		e.setDescription(event.getDescription());
 		e.setName(event.getName());
@@ -96,9 +116,9 @@ public class CareerEventController {
 	@RequestMapping(value="/api/careerevents/{id}/", method=RequestMethod.GET)
 	@Transactional
 	public CareerEvent getEventById(@CurrentUser User user, @PathVariable("id") int id) {
-		if (user instanceof Company) {
+		if (user instanceof Company || user instanceof Admin) {
 			CareerEvent e = this.careerRepository.getCareerEventWithAttendees(id);
-			if (user.getId() == e.getCompany().getId()) {
+			if (user.getId() == e.getCompany().getId() || user instanceof Admin) {
 				return e;
 			}
 			e.setRegistrations(Collections.emptyList());

@@ -14,6 +14,13 @@ export async function addCareerEventForMe(careerEvent) {
     return result.body;
 }
 
+export async function addCareerEvent(companyId, careerEvent) {
+    const result = await request
+        .post('/api/companies/' + companyId + '/careerevents/')
+        .send(careerEvent);
+    return result.body;
+}
+
 export async function getCareerEvent(id) {
     const result = await request
         .get('/api/careerevents/' + id + '/');

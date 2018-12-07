@@ -20,3 +20,14 @@ export async function registerSchool(school) {
         .set('Accept', 'application/json');
     return result.body;
 }
+
+export async function deleteSchool(id) {
+    const result = await request.delete('/api/schools/' + id + '/');
+    return result.body;
+}
+
+export async function editSchool(obj) {
+    const result = await request.put('/api/schools/' + obj.id + '/')
+        .send(obj);
+    return result.body;
+}

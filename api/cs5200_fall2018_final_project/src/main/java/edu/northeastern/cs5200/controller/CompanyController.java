@@ -77,5 +77,23 @@ public class CompanyController {
 		this.companyRepository.save(company);
 		return 1;
 	}
+	
+	@RequestMapping(value="/api/companies/{id}/", method=RequestMethod.DELETE)
+	public int deleteCompany(@CurrentUser Admin admin, @PathVariable("id") int id) {
+		assert (admin != null);
+		this.companyRepository.deleteById(id);
+		return 0;
+	}
+	
+	@RequestMapping(value="/api/companies/{id}/", method=RequestMethod.PUT)
+	public int editCompany(
+			@CurrentUser Admin admin,
+			@PathVariable("id") int id,
+			@RequestBody Company company) {
+		assert (admin != null);
+		assert (id == company.getId());
+		this.companyRepository.save(company);
+		return 0;
+	}
 
 }

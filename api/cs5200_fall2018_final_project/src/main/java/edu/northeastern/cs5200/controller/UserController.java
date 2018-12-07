@@ -74,6 +74,12 @@ public class UserController {
 		return 0;
 	}
 	
+	@RequestMapping(value="/api/admins/", method=RequestMethod.POST)
+	public int makeAdmin(@RequestBody Admin admin) {
+		this.userRepository.save(admin);
+		return 0;
+	}
+	
 	@RequestMapping(value="/api/me/contacts/", method=RequestMethod.GET)
 	@Transactional
 	public List<User> getConversationPartnersForUser(

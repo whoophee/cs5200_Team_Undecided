@@ -12,7 +12,8 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
 import edu.northeastern.cs5200.model.*;
-import edu.northeastern.cs5200.repository.*;;
+import edu.northeastern.cs5200.repository.*;
+import edu.northeastern.cs5200.resolvers.CurrentUser;;
 
 @RestController
 public class SchoolController {
@@ -39,5 +40,21 @@ public class SchoolController {
 		return 1;
 	}
 	
-
+	@RequestMapping(value="/api/schools/{id}/", method=RequestMethod.DELETE)
+	public int deleteSchopl(@CurrentUser Admin admin, @PathVariable("id") int id) {
+		assert (admin != null);
+		this.schoolRepository.deleteById(id);
+		return 0;
+	}
+	
+	@RequestMapping(value="/api/schools/{id}/", method=RequestMethod.PUT)
+	public int editSchool(
+			@CurrentUser Admin admin,
+			@PathVariable("id") int id,
+			@RequestBody School school) {
+		assert (admin != null);
+		assert (id == school.getId());
+		this.schoolRepository.save(school);
+		return 0;
+	}
 }

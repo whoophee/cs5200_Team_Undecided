@@ -15,6 +15,7 @@ class Home extends React.Component {
                 {getUserType(this.props.user) === 'professor' && <Redirect to="/professor/"/>}
                 {getUserType(this.props.user) === 'company' && <Redirect to="/company/"/>}
                 {getUserType(this.props.user) === 'school' && <Redirect to="/school/"/>}
+                {getUserType(this.props.user) === 'admin' && <Redirect to="/admin/"/>}
                 <Layout.Content style={{padding: '24px 10px', margin: '0 100px', backgroundColor: '#fff'}}>
                     <div style={{width: '100%'}}>
                         <div style={{display: 'flex', width: '100%', alignItems: 'center', flexDirection: 'column'}}>
