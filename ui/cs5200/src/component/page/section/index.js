@@ -15,17 +15,17 @@ class SectionPage extends React.Component {
 
     _renderContent() {
         const {sectionId, questionId, postId} = this.props.match.params;
-        if (questionId == null) return "No Question Selected";
+        if (questionId == null) return <div style={{padding: '5px 30px'}}>No Question Selected</div>;
         return <QuestionPane sectionId={sectionId} questionId={questionId} postId={postId}/>;
     }
     render() {
         
         return (
             <Layout style={{backgroundColor: '#fff'}}>
-                <Layout.Sider width={300} height="100%" style={{backgroundColor: '#fff', overflowY: 'hidden'}}>
+                <Layout.Sider width={300} height="100%" style={{backgroundColor: '#fff', overflowY: 'hidden', minHeight: '100%'}}>
                     {this._renderSider()}
                 </Layout.Sider>
-                <Layout.Content style={{overflowY: 'scroll'}}>
+                <Layout.Content style={{overflowY: 'scroll', minHeight: '100%'}}>
                     {this._renderContent()}
                 </Layout.Content>
             </Layout>

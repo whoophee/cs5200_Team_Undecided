@@ -61,6 +61,10 @@ public class SectionController {
 		if (currentUser instanceof Professor) {
 			Professor p = (Professor) currentUser;
 			if (p.getId() != professorId) return -1;
+			section.setApproved(false);
+		}
+		if (currentUser instanceof School) {
+			section.setApproved(true);
 		}
 		section.setProfessor(this.professorRepository.getOne(professorId));
 		this.sectionRepository.save(section);
@@ -72,6 +76,20 @@ public class SectionController {
 	public Section getSectionWithQuestions(
 			@PathVariable("id") int id) {
 		return this.sectionRepository.getSectionWithQuestions(id);
+	}
+	
+	static class ApprovePut {public boolean approved;}
+	@RequestMapping(value="/api/sections/{id}/approve/", method=RequestMethod.PUT)
+	@Transactional
+	public int approveSection(
+			@CurrentUser School school,
+			@PathVariable("id") int id,
+			@RequestBody ApprovePut body) {
+		assert (school != null);
+		Section s = this.sectionRepository.findById(id).get();
+		s.setApproved(body.approved);
+		this.sectionRepository.save(s);
+		return 0;
 	}
 	
 	@RequestMapping(value="/api/sections/search/", method=RequestMethod.GET)

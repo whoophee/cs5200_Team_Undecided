@@ -5,7 +5,7 @@ import { Layout } from 'antd';
 
 export default NeedsUser(['professor'])((props) => {
     return (
-        <Layout>
+        <Layout style={{padding: '24px 0px', margin: '0 100px', backgroundColor: '#fff'}}>
             <Layout.Content>
                 <SectionPage professor={props.user}/>
             </Layout.Content>

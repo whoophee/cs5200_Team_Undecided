@@ -7,7 +7,7 @@ export async function getSectionsForMe() {
 }
 
 export async function approveSection(sectionId) {
-    const result = await request.patch('/api/sections/' + sectionId + '/')
+    const result = await request.put('/api/sections/' + sectionId + '/approve/')
         .send({approved: true});
     return result.body;
 }

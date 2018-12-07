@@ -6,6 +6,7 @@ import Sections from './sections';
 import ClassesEdit from './class/index';
 import Professors from './professors';
 import Students from './students';
+import CareerEvents from './career-events';
 
 class Component extends React.Component {
     static getDerivedStateFromProps(props, state) {
@@ -33,6 +34,9 @@ class Component extends React.Component {
                 <Menu.Item key="students">
                     <Link to={path + "students/"}>Students</Link>
                 </Menu.Item>
+                <Menu.Item key="careerevents">
+                    <Link to={path + "careerevents/"}>Career Events</Link>
+                </Menu.Item>
             </Menu>
         )
     }
@@ -49,6 +53,7 @@ class Component extends React.Component {
                 <Route path={path + 'sections/'} exact component={Sections}/>
                 <Route path={path + 'professors/'} exact component={Professors}/>
                 <Route path={path + 'students/'} exact component={Students}/>
+                <Route path={path + 'careerevents/'} exact component={CareerEvents}/>
             </div>
         );
     }

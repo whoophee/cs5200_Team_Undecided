@@ -5,27 +5,33 @@ import { getSectionsForMe } from '../../../api/section';
 import ProfessorSelector from '../../util/form/professor';
 import ClassSelector from '../../util/form/class';
 import { addSectionForProfessor, approveSection } from '../../../api/section';
+import { Link } from 'react-router-dom';
+import { WithUser, getUserType } from '../../util/datastore/user';
 
-const renderListItem = (curSection) => {
+
+const renderListItem = (reload, user) => (curSection) => {
     return (
         <List.Item actions={[
-            <Button key="approve" onClick={() => approveSection(curSection.id)}>
+            !curSection.approved && getUserType(user) === 'school' &&
+            <Button key="approve" onClick={() => approveSection(curSection.id).then(() => reload())}>
                 <Icon type="check-circle"/>
                 Approve
-            </Button>
+            </Button>,
+            (getUserType(user) === 'professor' || curSection.approved) &&
+            <span>Status: {curSection.approved ? "Approved" : "Pending"}</span>
         ]}>
             <List.Item.Meta
-                title={[
+                title={<Link to={"/sections/" + curSection.id + "/"}>{[
                     curSection.schoolClass.name,
                     'Professor ' + curSection.professor.name,
                     curSection.name
-                ].join(' - ')}
+                ].join(' - ')}</Link>}
                 description={curSection.description}/>
         </List.Item>
     );
 };
 
-const SectionsList = (props) => <Spin spinning={props.loadStatus === 'loading'}><List bordered dataSource={props.sections} renderItem={renderListItem}/></Spin>;
+const SectionsList = WithUser((props) => <Spin spinning={props.loadStatus === 'loading'}><List bordered dataSource={props.sections} renderItem={renderListItem(props.reload, props.user)}/></Spin>);
 
 const mapSectionsToProps = (sections) => {
     return {sections};

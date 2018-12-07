@@ -19,3 +19,23 @@ export async function getCareerEvent(id) {
         .get('/api/careerevents/' + id + '/');
     return makeObjectGraph(result.body);
 }
+
+export async function approveCareerEvent(id) {
+    const result = await request
+        .put('/api/careerevents/' + id + '/approve/')
+        .send({approved: true});
+    return result.body;
+}
+
+export async function updateEvent(id, event) {
+    const result = await request
+        .put('/api/careerevents/' + id + '/')
+        .send(event);
+    return result.body;
+}
+
+export async function deleteEvent(id) {
+    const result = await request
+        .delete('/api/careerevents/' + id + '/');
+    return result.body;
+}

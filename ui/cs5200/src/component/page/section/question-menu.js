@@ -178,7 +178,8 @@ class QuestionMenu extends React.Component {
                 display: 'flex',
                 maxHeight: '100%',
                 minHeight: '100%',
-                flexDirection: 'column'
+                flexDirection: 'column',
+                borderRight: '1px solid #999'
             }}>
                 <CompositeModalForm
                     wrappedComponentRef={this._handleQuestionModalRef}
@@ -203,4 +204,4 @@ class QuestionMenu extends React.Component {
     }
 }
 
-export default NeedsUser(['professor', 'student'])(QuestionMenu);
+export default NeedsUser(['professor', 'student', 'school'])(QuestionMenu);

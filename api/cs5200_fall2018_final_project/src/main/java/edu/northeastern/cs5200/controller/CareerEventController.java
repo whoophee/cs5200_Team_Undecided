@@ -37,7 +37,7 @@ public class CareerEventController {
 			return this.careerRepository.getCareerEventsForCompany(company.getId());
 		} else if (user instanceof Student) {
 			Student student = (Student) user;
-			return this.careerRepository.getCareerEventsForSchool(student.getSchool().getId(), LocalDateTime.now());
+			return this.careerRepository.getApprovedCareerEventsForSchool(student.getSchool().getId(), LocalDateTime.now());
 		} else if (user instanceof School) {
 			School school = (School) user;
 			return this.careerRepository.getCareerEventsForSchool(school.getId(), LocalDateTime.ofEpochSecond(0, 0, ZoneOffset.UTC));
@@ -51,7 +51,45 @@ public class CareerEventController {
 			@CurrentUser Company company,
 			@RequestBody CareerEvent event) {
 		event.setCompany(this.companyRepository.getOne(company.getId()));
+		event.setApproved(false);
 		this.careerRepository.save(event);
+		return 0;
+	}
+	
+	@RequestMapping(value="/api/careerevents/{id}/", method=RequestMethod.DELETE)
+	@Transactional
+	public int deleteEvent(
+			@CurrentUser Company company,
+			@PathVariable("id") int id) {
+		CareerEvent e = this.careerRepository.findById(id).get();
+		assert (company.getId() == e.getCompany().getId());
+		this.careerRepository.delete(e);
+		return 0;
+	}
+	
+	@RequestMapping(value="/api/careerevents/{id}/", method=RequestMethod.PUT)
+	@Transactional
+	public int updateEvent(
+			@CurrentUser Company company,
+			@RequestBody CareerEvent event,
+			@PathVariable("id") int id) {
+		CareerEvent e = this.careerRepository.findById(id).get();
+		assert (company.getId() == e.getCompany().getId());
+		e.setLocation(event.getLocation());
+		e.setDescription(event.getDescription());
+		e.setName(event.getName());
+		e.setSchool(event.getSchool());
+		this.careerRepository.save(e);
+		return 0;
+	}
+	
+	static class EventApprove {public boolean approved;}
+	@RequestMapping(value="/api/careerevents/{id}/approve/", method=RequestMethod.PUT)
+	@Transactional
+	public int approveEvent(@CurrentUser School school, @PathVariable("id") int id, @RequestBody EventApprove approve) {
+		CareerEvent e = this.careerRepository.findById(id).get();
+		assert (e.getSchool().getId() == school.getId());
+		e.setApproved(approve.approved);
 		return 0;
 	}
 	

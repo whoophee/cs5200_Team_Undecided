@@ -2,7 +2,7 @@ import React from 'react';
 import { List, Button, Row, Icon, Form, Modal, Spin, Input, DatePicker } from 'antd';
 import { WithLoader } from '../../util/api/loader';
 import { Link } from 'react-router-dom';
-import { getCareerEventsForMe, addCareerEventForMe } from '../../../api/career-events';
+import { getCareerEventsForMe, addCareerEventForMe, deleteEvent } from '../../../api/career-events';
 import SchoolSelector from '../../util/form/school';
 
 class AddCareerEventModalInner extends React.Component {
@@ -108,14 +108,21 @@ export class CareerEventsPage extends React.Component {
             modalLoading: false
         };
     }
+    _deleteEvent = (id) => (e) => {
+        deleteEvent(id).then(() => this.props.reload());
+    };
     _renderCareerEvents() {
         const careerEvents = this.props.careerEvents;
 
         return (
-            <List bordered>
+            <List bordered loading={this.props.loadStatus === 'loading'}>
                 {careerEvents.map(event => {
                     return (
-                        <List.Item key={event.id}>
+                        <List.Item key={event.id}
+                            actions={[
+                                <span>Status: {event.approved ? "Approved" : "Pending"}</span>,
+                                <Button type="danger" onClick={this._deleteEvent(event.id)}>Delete</Button>
+                            ]}>
                             <Link to={"/events/" + event.id + "/"}>
                                 {event.name}
                                 {' - '}

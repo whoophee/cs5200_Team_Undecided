@@ -16,3 +16,8 @@ export async function addClassForMe(classData) {
         .send(classData);
     return result.body;
 }
+
+export async function deleteClass(classId) {
+    const result = await request.delete('/api/classes/' + classId + '/');
+    return makeObjectGraph(result.body);
+}

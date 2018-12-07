@@ -49,6 +49,8 @@ public class CareerEvent {
 	private String name;
 	private String description;
 	private String location;
+	@Column(name="is_approved", nullable=true)
+	private boolean approved;
 
 	public CareerEvent() {
 		// TODO Auto-generated constructor stub
@@ -133,6 +135,15 @@ public class CareerEvent {
 		return this.registrations.stream()
 				.map((Registration r) -> r.getId().getStudent())
 				.collect(Collectors.toList());
+	}
+
+	public boolean isApproved() {
+		return approved;
+	}
+
+	public void setApproved(Boolean approved) {
+		if (approved == null) approved = false;
+		this.approved = approved;
 	}
 
 	static class CareerEventSchoolDeserializer extends ManyToOneDeserializer<School> {

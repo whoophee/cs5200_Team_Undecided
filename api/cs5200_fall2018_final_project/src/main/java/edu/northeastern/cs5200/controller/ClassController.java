@@ -39,6 +39,15 @@ public class ClassController {
 		return this.classRepository.getClassWithSections(id);
 	}
 	
+	@RequestMapping(value="/api/classes/{id}/", method=RequestMethod.DELETE)
+	@Transactional
+	public int deleteClass(@CurrentUser School school, @PathVariable("id") int id) {
+		Class c = this.classRepository.findById(id).get();
+		assert(c.getSchool().getId() == school.getId());
+		this.classRepository.delete(c);
+		return 0;
+	}
+	
 	@RequestMapping(value="/api/school/me/classes/", method=RequestMethod.POST)
 	@Transactional
 	public int addClassForSchool(

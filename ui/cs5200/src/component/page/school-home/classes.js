@@ -2,12 +2,15 @@ import React from 'react';
 import { List, Input, Button, Spin, Row, Icon, Modal, Form } from 'antd';
 import Loader from '../../util/api/loader';
 import { Link } from "react-router-dom";
-import { getClassesForMe, addClassForMe } from '../../../api/class';
+import { getClassesForMe, addClassForMe, deleteClass } from '../../../api/class';
 
-const renderListItem = (curClass) => {
+const makeDeleteClass = (id, reload) => () => deleteClass(id).then(() => reload());
+
+const renderListItem = (reload) => (curClass) => {
     return (
         <List.Item actions={[
-            <Link to={"/school/classes/" + curClass.id + "/"}>Edit</Link>
+            <Link to={"/school/classes/" + curClass.id + "/"}>Edit</Link>,
+            <Button type="danger" onClick={makeDeleteClass(curClass.id, reload)}>Delete</Button>
         ]}>
             <List.Item.Meta
                 title={curClass.courseNumber + " - " + curClass.name}
@@ -16,7 +19,7 @@ const renderListItem = (curClass) => {
     );
 };
 
-const ClassesList = (props) => <List bordered dataSource={props.classes} renderItem={renderListItem}/>;
+const ClassesList = (props) => <List bordered loading={props.loadStatus === 'loading'} dataSource={props.classes} renderItem={renderListItem(props.reload)}/>;
 
 const mapClassesToProps = (classes) => {
     return {classes};

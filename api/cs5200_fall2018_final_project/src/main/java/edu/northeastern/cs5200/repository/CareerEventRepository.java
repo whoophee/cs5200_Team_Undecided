@@ -17,4 +17,7 @@ public interface CareerEventRepository extends JpaRepository<CareerEvent, Intege
 	
 	@Query("select event from CareerEvent event join event.school school where event.school.id = ?1 and event.start > ?2 order by event.start desc")
 	public List<CareerEvent> getCareerEventsForSchool(int id, LocalDateTime after);
+	
+	@Query("select event from CareerEvent event join event.school school where event.school.id = ?1 and event.start > ?2 and event.approved=true order by event.start desc")
+	public List<CareerEvent> getApprovedCareerEventsForSchool(int id, LocalDateTime after);
 }

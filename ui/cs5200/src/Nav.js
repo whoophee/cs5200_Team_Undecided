@@ -23,7 +23,7 @@ export default (props) => {
         <Menu mode="horizontal"
               theme="dark"
               selectedKeys={[
-                  ['student', 'school', 'company', 'conversations', 'professor', 'login', 'register', 'logout'].find(item => props.location.pathname.indexOf(item) >= 0)
+                  ['school', 'student', 'company', 'conversations', 'professor', 'login', 'register', 'logout'].find(item => props.location.pathname.indexOf(item) >= 0)
               ]}
               style={{height: '64px', lineHeight: '64px'}}>
             <Menu.Item><Link to="/"><span style={{color: 'white', verticalAlign: 'middle', fontSize: '32px'}}>Piazzza</span></Link></Menu.Item>

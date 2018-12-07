@@ -7,7 +7,7 @@ class CompanyHome extends React.Component {
     render() {
         return (
             <Layout style={{padding: '24px 20px', margin: '0 100px', backgroundColor: '#fff'}}>
-                <Layout.Content>
+                <Layout.Content style={{overflowY: 'scroll'}}>
                     <CompanyProfile/><br/>
                     <CareerEvents/>
                 </Layout.Content>

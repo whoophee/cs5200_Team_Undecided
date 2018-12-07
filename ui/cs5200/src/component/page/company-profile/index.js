@@ -1,10 +1,31 @@
 import React from 'react';
-import { Layout, Card } from 'antd';
+import { Layout, Card, List } from 'antd';
 import { WithLoader } from '../../util/api/loader';
 import { getCompanyWithCareerEvents } from '../../../api/company';
+import { Link } from 'react-router-dom';
+import { WithUser, getUserType } from '../../util/datastore/user';
 
 
 class CompanyProfile extends React.Component {
+    _renderCareerEventList() {
+        let filter = getUserType(this.props.user) === 'student'
+                ? (item) => item.school.id === this.props.user.school.id
+                : getUserType(this.props.user) === 'school'
+                ? (item) => item.school.id === this.props.user.id
+                : () => true;
+        return (
+            
+            <List bordered>
+                {this.props.company.careerEvents.filter(filter).map(event => (
+                    <List.Item key={event.id}>
+                        <Link to={'/events/' + event.id + '/'}>{event.school.name}
+                        {' - '}
+                        {event.name}</Link>
+                    </List.Item>
+                ))}
+            </List>
+        );
+    }
     render() {
         const company = this.props.company;
 
@@ -23,7 +44,9 @@ class CompanyProfile extends React.Component {
                             }/>
                         <br/>
                         <h2>About</h2>
-                        <div style={{}}>{company.description}</div>
+                        <div style={{}}>{company.description}</div><br/>
+                        <h2>Career Events</h2>
+                        {this._renderCareerEventList()}
                     </Card>
                     
                 </Layout.Content>
@@ -35,4 +58,4 @@ class CompanyProfile extends React.Component {
 export default WithLoader(getCompanyWithCareerEvents, {
     loadArg: props => props.match.params.id,
     mapLoadToProps: (company) => ({company})
-})(CompanyProfile);
+})(WithUser(CompanyProfile));

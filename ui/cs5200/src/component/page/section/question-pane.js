@@ -60,6 +60,7 @@ class QuestionPane extends React.Component {
         this._addAnswerOrProfAnswerToQuestion(this.props.question.id, values).then(() => this.props.reload());
     };
     _renderAnswerComposer() {
+        if (getUserType(this.props.user) === 'school') return <Row></Row>;
         return (
             <Row>
                 <AnswerComposer question={this.props.question} onSubmit={this._handleAnswer}/>
@@ -72,7 +73,8 @@ class QuestionPane extends React.Component {
                 minHeight: '100%',
                 maxHeight: '100%',
                 display: 'flex',
-                flexDirection: 'column'
+                flexDirection: 'column',
+                padding: '0 10px'
             }}>
                 {this.props.postId == null && this._renderQuestion()}
                 {this.props.postId == null && this._renderAnswers()}
