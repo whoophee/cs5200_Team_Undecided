@@ -12,7 +12,7 @@ const Conversations = NeedsUser(['student', 'professor', 'company', 'school'])(p
 
 const Login = NeedsUser([null])(props => <Menu.Item {...props}><Link to="/login/">Login</Link></Menu.Item>);
 const Register = NeedsUser([null])(props => <Menu.Item {...props}><Link to="/register/">Register</Link></Menu.Item>);
-const Logout = NeedsUser(['student', 'professor', 'company', 'school'])(props => <Menu.Item {...props}><Link to="/logout/">Log Out</Link></Menu.Item>);
+const Logout = NeedsUser(['student', 'professor', 'company', 'school', 'admin'])(props => <Menu.Item {...props}><Link to="/logout/">Log Out</Link></Menu.Item>);
 
 const CompanySearch = (props) => <Menu.Item {...props}><Input.Search onSearch={(val) => {
     props.history.push("/companies/?q=" + encodeURI(val || ''));

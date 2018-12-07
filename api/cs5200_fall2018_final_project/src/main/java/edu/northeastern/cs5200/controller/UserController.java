@@ -69,8 +69,14 @@ public class UserController {
 	
 	@RequestMapping(value="/api/users/logout/", method=RequestMethod.GET)
 	public int logout(HttpServletResponse response) {
-		response.addCookie(new Cookie("token", ""));
-		response.addCookie(new Cookie("username", ""));
+		Cookie a = new Cookie("token", "");
+		a.setPath("/");
+		a.setMaxAge(0);
+		Cookie b = new Cookie("username", "");
+		b.setPath("/");
+		b.setMaxAge(0);
+		response.addCookie(a);
+		response.addCookie(b);
 		return 0;
 	}
 	
