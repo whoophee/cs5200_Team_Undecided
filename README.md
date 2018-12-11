@@ -9,4 +9,4 @@ Node + Npm: https://nodejs.org/en/
 
 Open /api/ in STS, configure application.properties with whatever database you want, and run as a spring boot app
 
-cd /ui/ and run npm start
+cd /ui/cs5200/ and run npm start
